@@ -45,4 +45,34 @@ namespace Character.Events
 
         public int Damage;
     }
+
+    public class CharacterGainXPEvent : Event<CharacterGainXPEvent>
+    {
+        public CharacterGainXPEvent(int xp)
+        {
+            XP = xp;
+        }
+
+        public int XP;
+    }
+
+    public class CharacterGainHealthEvent : Event<CharacterGainHealthEvent>
+    {
+        public CharacterGainHealthEvent(int health)
+        {
+            Health = health;
+        }
+
+        public int Health;
+    }
+
+    public class CharacterGainMaxHealthEvent : Event<CharacterGainMaxHealthEvent>
+    {
+        public CharacterGainMaxHealthEvent(int maxHealth)
+        {
+            MaxHealth = maxHealth;
+        }
+
+        public int MaxHealth;
+    }
 }
