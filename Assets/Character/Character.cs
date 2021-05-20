@@ -15,6 +15,25 @@ namespace Character {
             _xp = 0;
             _level = 1;
             _currentHealth = MaxHealth;
+
+            FireInitialEvents();
+
+            RegisterEventListeners();
+        }
+
+        private void FireInitialEvents()
+        {
+            new CharacterXPChangedEvent(_xp).Fire();
+            new CharacterLevelChangedEvent(_level).Fire();
+            new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
+        }
+
+        private void RegisterEventListeners()
+        {
+            CharacterAttackedEvent.RegisterListener(OnCharacterAttackedEvent);
+            CharacterGainXPEvent.RegisterListener(OnCharacterGainXPEvent);
+            CharacterGainHealthEvent.RegisterListener(OnCharacterGainHealthEvent);
+            CharacterGainMaxHealthEvent.RegisterListener(OnCharacterGainMaxHealthEvent);
         }
 
         private void GainXP(int xp)
@@ -55,11 +74,32 @@ namespace Character {
         {
             MaxHealth += health;
             new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
+            GainHealth(health);
         }
 
         private void Die()
         {
             new CharacterDiedEvent().Fire();
+        }
+
+        private void OnCharacterAttackedEvent(CharacterAttackedEvent characterAttackedEvent)
+        {
+            TakeDamage(characterAttackedEvent.Damage);
+        }
+
+        private void OnCharacterGainXPEvent(CharacterGainXPEvent characterGainXPEvent)
+        {
+            GainXP(characterGainXPEvent.XP);
+        }
+
+        private void OnCharacterGainHealthEvent(CharacterGainHealthEvent characterGainHealthEvent)
+        {
+            GainHealth(characterGainHealthEvent.Health);
+        }
+
+        private void OnCharacterGainMaxHealthEvent(CharacterGainMaxHealthEvent characterGainMaxHealthEvent)
+        {
+            GainMaxHealth(characterGainMaxHealthEvent.MaxHealth);
         }
     }
 }
