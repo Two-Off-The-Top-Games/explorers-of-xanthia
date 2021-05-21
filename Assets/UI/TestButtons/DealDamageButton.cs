@@ -1,4 +1,4 @@
-using Character.Events;
+using Entities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +14,6 @@ public class DealDamageButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        new CharacterAttackedEvent(1).Fire();
+        new EntityTakeDamageEvent(1).Fire();
     }
 }
