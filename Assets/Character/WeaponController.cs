@@ -1,26 +1,22 @@
 using Character.Events;
-using Items.Equipment.Weapons;
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    private GameObject _instantiatedWeapon;
-    public Weapon Weapon;
+    public GameObject StartingWeapon;
+    private GameObject _CurrentWeapon;
+    private Weapon _weapon;
 
     private void Start()
     {
-        SwitchWeapon(new Longsword());
+        SwitchWeapon(StartingWeapon);
     }
 
-    private void Attack()
-    {
-        new CharacterAttackedEvent(Weapon.Damage).Fire();
-    }
+    private void Attack() => new CharacterAttackedEvent(_weapon.Damage).Fire();
 
-    private void SwitchWeapon(Weapon newWeapon)
+    private void SwitchWeapon(GameObject newWeapon)
     {
-        Destroy(_instantiatedWeapon);
-        Weapon = newWeapon;
-        _instantiatedWeapon = Instantiate(Weapon.EquippableGameObject, transform);
+        _CurrentWeapon = newWeapon;
+        _weapon = _CurrentWeapon.GetComponent<Weapon>();
     }
 }
