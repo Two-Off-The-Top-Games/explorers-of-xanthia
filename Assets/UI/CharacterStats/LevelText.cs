@@ -1,4 +1,4 @@
-using Character.Events;
+using Entities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,10 +6,19 @@ public class LevelText : MonoBehaviour
 {
     private Text _text;
 
-    private void Start()
+    private void Awake()
+    {
+        _text = gameObject.GetComponentInChildren<Text>();
+    }
+
+    private void OnEnable()
     {
         CharacterLevelChangedEvent.RegisterListener(UpdateLevelText);
-        _text = gameObject.GetComponentInChildren<Text>();
+    }
+
+    private void OnDisable()
+    {
+        CharacterLevelChangedEvent.DeregisterListener(UpdateLevelText);
     }
 
     private void UpdateLevelText(CharacterLevelChangedEvent characterLevelChangedEvent)

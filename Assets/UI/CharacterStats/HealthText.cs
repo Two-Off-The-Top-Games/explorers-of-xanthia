@@ -1,4 +1,4 @@
-using Character.Events;
+using Entities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,14 +6,23 @@ public class HealthText : MonoBehaviour
 {
     private Text _text;
 
-    private void Start()
+    private void Awake()
     {
-        CharacterHealthChangedEvent.RegisterListener(UpdateHealthText);
         _text = gameObject.GetComponentInChildren<Text>();
     }
 
-    private void UpdateHealthText(CharacterHealthChangedEvent characterHealthChangedEvent)
+    private void OnEnable()
     {
-        _text.text = $"HP: {characterHealthChangedEvent.CurrentHealth}/{characterHealthChangedEvent.MaxHealth}";
+        EntityHealthChangedEvent.RegisterListener(UpdateHealthText);
+    }
+
+    private void OnDisable()
+    {
+        EntityHealthChangedEvent.DeregisterListener(UpdateHealthText);
+    }
+
+    private void UpdateHealthText(EntityHealthChangedEvent entityHealthChangedEvent)
+    {
+        _text.text = $"HP: {entityHealthChangedEvent.CurrentHealth}/{entityHealthChangedEvent.MaxHealth}";
     }
 }

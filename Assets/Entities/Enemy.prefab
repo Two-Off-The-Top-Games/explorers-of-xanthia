@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1622712802378845816}
-  - component: {fileID: -3391001172087017121}
-  - component: {fileID: -6763038704393028649}
+  - component: {fileID: -4532482255663259431}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -32,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3391001172087017121
+--- !u!114 &-4532482255663259431
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,19 +40,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 5286156105453446373}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d0f6cef4031f3c4795276c4b38da2f9, type: 3}
+  m_Script: {fileID: 11500000, guid: dbeb7f7413832114fbcf1eb778aa165d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StartingWeapon: {fileID: 4615739129417186831, guid: 633720af50af5354fb948e7a70022baf, type: 3}
   MaxHealth: 20
---- !u!114 &-6763038704393028649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5286156105453446373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c6e181369be59643a6a856d7c5f5714, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

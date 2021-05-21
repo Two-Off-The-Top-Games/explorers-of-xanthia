@@ -1,4 +1,4 @@
-using Character.Events;
+using Entities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +14,6 @@ public class GainMaxHealthButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        new CharacterGainMaxHealthEvent(1).Fire();
+        new EntityGainMaxHealthEvent(1).Fire();
     }
 }

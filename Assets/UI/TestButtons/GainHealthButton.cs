@@ -1,4 +1,4 @@
-using Character.Events;
+using Entities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +14,6 @@ public class GainHealthButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        new CharacterGainHealthEvent(1).Fire();
+        new EntityGainHealthEvent(1).Fire();
     }
 }
