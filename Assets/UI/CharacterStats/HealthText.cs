@@ -13,16 +13,16 @@ public class HealthText : MonoBehaviour
 
     private void OnEnable()
     {
-        EntityHealthChangedEvent.RegisterListener(UpdateHealthText);
+        CharacterHealthChangedEvent.RegisterListener(UpdateHealthText);
     }
 
     private void OnDisable()
     {
-        EntityHealthChangedEvent.DeregisterListener(UpdateHealthText);
+        CharacterHealthChangedEvent.DeregisterListener(UpdateHealthText);
     }
 
-    private void UpdateHealthText(EntityHealthChangedEvent entityHealthChangedEvent)
+    private void UpdateHealthText(CharacterHealthChangedEvent characterHealthChangedEvent)
     {
-        _text.text = $"HP: {entityHealthChangedEvent.CurrentHealth}/{entityHealthChangedEvent.MaxHealth}";
+        _text.text = $"HP: {characterHealthChangedEvent.CurrentHealth}/{characterHealthChangedEvent.MaxHealth}";
     }
 }

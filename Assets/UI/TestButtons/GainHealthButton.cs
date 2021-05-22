@@ -14,6 +14,6 @@ public class GainHealthButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        new EntityGainHealthEvent(1).Fire();
+        new CharacterGainHealthEvent(1).Fire();
     }
 }
