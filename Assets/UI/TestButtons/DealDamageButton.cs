@@ -14,6 +14,6 @@ public class DealDamageButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        new EntityTakeDamageEvent(1).Fire();
+        new CharacterTakeDamageEvent(1).Fire();
     }
 }

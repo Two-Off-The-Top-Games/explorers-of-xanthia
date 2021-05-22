@@ -14,6 +14,6 @@ public class GainMaxHealthButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        new EntityGainMaxHealthEvent(1).Fire();
+        new CharacterGainMaxHealthEvent(1).Fire();
     }
 }
