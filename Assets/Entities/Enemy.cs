@@ -1,4 +1,5 @@
 using Entities.Events;
+using Events.Common;
 using System;
 using UnityEngine;
 
@@ -33,9 +34,10 @@ namespace Entities
 
         private void RegisterEventListeners()
         {
-            EnemyTakeDamageEvent.RegisterListener(_instanceId, OnEntityTakeDamageEvent);
-            EnemyGainHealthEvent.RegisterListener(_instanceId, OnEntityGainHealthEvent);
-            EnemyGainMaxHealthEvent.RegisterListener(_instanceId, OnEntityGainMaxHealthEvent);
+            EnemyTakeDamageEvent.RegisterListener(_instanceId, OnEnemyTakeDamageEvent);
+            EnemyGainHealthEvent.RegisterListener(_instanceId, OnEnemyGainHealthEvent);
+            EnemyGainMaxHealthEvent.RegisterListener(_instanceId, OnEnemyGainMaxHealthEvent);
+            StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
         }
 
         private void TakeDamage(int damage)
@@ -75,19 +77,24 @@ namespace Entities
         // TODO: Pick proper event.
         //private void Attack() => new CharacterAttackedEvent(_weapon.Damage).Fire();
 
-        private void OnEntityTakeDamageEvent(EnemyTakeDamageEvent entityTakeDamageEvent)
+        private void OnEnemyTakeDamageEvent(EnemyTakeDamageEvent enemyTakeDamageEvent)
         {
-            TakeDamage(entityTakeDamageEvent.Damage);
+            TakeDamage(enemyTakeDamageEvent.Damage);
         }
 
-        private void OnEntityGainHealthEvent(EnemyGainHealthEvent entityGainHealthEvent)
+        private void OnEnemyGainHealthEvent(EnemyGainHealthEvent enemyGainHealthEvent)
         {
-            GainHealth(entityGainHealthEvent.Health);
+            GainHealth(enemyGainHealthEvent.Health);
         }
 
-        private void OnEntityGainMaxHealthEvent(EnemyGainMaxHealthEvent entityGainMaxHealthEvent)
+        private void OnEnemyGainMaxHealthEvent(EnemyGainMaxHealthEvent enemyGainMaxHealthEvent)
         {
-            GainMaxHealth(entityGainMaxHealthEvent.MaxHealth);
+            GainMaxHealth(enemyGainMaxHealthEvent.MaxHealth);
+        }
+
+        private void OnStartCombatTurnEvent(StartCombatTurnEvent _)
+        {
+            Debug.Log("My turn started!");
         }
     }
 }

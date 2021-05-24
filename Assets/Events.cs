@@ -7,7 +7,6 @@ namespace Events
     /// This will require you to supply your own implementation details for firing events.
     /// Use the other event classes in this namespace as they have all of the necessary implementation details for each use case.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public abstract class BaseEvent
     {
         private bool _hasFired = false;
@@ -53,6 +52,10 @@ namespace Events
         }
     }
 
+    /// <summary>
+    /// You only need to call the base constructor with the target instance id for the event.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class TargetEvent<T> : BaseEvent where T : TargetEvent<T>
     {
         private int _targetInstanceId;
@@ -90,6 +93,10 @@ namespace Events
         }
     }
 
+    /// <summary>
+    /// You only need to call the base constructor with the source instance id for the event.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class SourceEvent<T> : BaseEvent where T : SourceEvent<T>
     {
         private int _sourceInstanceId;

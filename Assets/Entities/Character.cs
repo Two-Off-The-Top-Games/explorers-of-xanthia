@@ -1,4 +1,6 @@
 using Entities.Events;
+using Events.Common;
+using Events.GameState;
 using System;
 using UnityEngine;
 
@@ -14,9 +16,11 @@ namespace Entities
         private int _currentHealth;
         private int _xp;
         private int _level;
+        private int _instanceId;
 
         private void Start()
         {
+            _instanceId = GetInstanceID();
             _xp = 0;
             _level = 1;
             _currentHealth = MaxHealth;
@@ -41,6 +45,7 @@ namespace Entities
             CharacterTakeDamageEvent.RegisterListener(OnCharacterTakeDamageEvent);
             CharacterGainHealthEvent.RegisterListener(OnCharacterGainHealthEvent);
             CharacterGainMaxHealthEvent.RegisterListener(OnCharacterGainMaxHealthEvent);
+            StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
         }
 
         private void GainXP(int xp)
@@ -117,5 +122,11 @@ namespace Entities
         {
             GainXP(characterGainXPEvent.XP);
         }
+
+        private void OnStartCombatTurnEvent(StartCombatTurnEvent eventInfo)
+        {
+            Debug.Log("My turn started!");
+        }
+
     }
 }

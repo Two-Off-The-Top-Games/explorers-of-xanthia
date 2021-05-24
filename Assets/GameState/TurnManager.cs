@@ -1,3 +1,4 @@
+using Events.Common;
 using Events.GameState;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,7 +41,7 @@ public class TurnManager : MonoBehaviour
     private void AdvanceTurn()
     {
         int instanceId = _turnOrder.Dequeue();
-        // TODO: Fire start event for the instance that's next.
+        new StartCombatTurnEvent(instanceId).Fire();
         _turnOrder.Enqueue(instanceId);
     }
 
