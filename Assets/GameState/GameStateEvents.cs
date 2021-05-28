@@ -13,4 +13,9 @@ namespace Events.GameState
     }
 
     public class EndCombatEvent : GlobalEvent<EndCombatEvent> { }
+
+    public class TurnEndedEvent : SourceEvent<TurnEndedEvent>
+    {
+        public TurnEndedEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
 }

@@ -41,6 +41,7 @@ public class TurnManager : MonoBehaviour
     private void AdvanceTurn()
     {
         int instanceId = _turnOrder.Dequeue();
+        new TurnEndedEvent(instanceId).Fire();
         new StartCombatTurnEvent(instanceId).Fire();
         _turnOrder.Enqueue(instanceId);
     }

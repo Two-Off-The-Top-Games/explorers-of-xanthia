@@ -46,6 +46,7 @@ namespace Entities
             CharacterGainHealthEvent.RegisterListener(OnCharacterGainHealthEvent);
             CharacterGainMaxHealthEvent.RegisterListener(OnCharacterGainMaxHealthEvent);
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
+            TurnEndedEvent.RegisterListener(_instanceId, OnTurnEndedEvent);
         }
 
         private void GainXP(int xp)
@@ -126,7 +127,13 @@ namespace Entities
         private void OnStartCombatTurnEvent(StartCombatTurnEvent eventInfo)
         {
             Debug.Log("My turn started!");
+            new CharacterTurnStartedEvent().Fire();
         }
 
+        private void OnTurnEndedEvent(TurnEndedEvent _)
+        {
+            Debug.Log("My turn ended!");
+            new CharacterTurnEndedEvent().Fire();
+        }
     }
 }
