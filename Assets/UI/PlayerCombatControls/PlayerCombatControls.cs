@@ -1,7 +1,7 @@
 using Entities.Events;
 using UnityEngine;
 
-public class PlayerCombatControls : MonoBehaviour
+public class PlayerCombatControls : UIComponentWithQueueableActions
 {
     public GameObject PlayerCombatControlsPanel;
 
@@ -14,11 +14,11 @@ public class PlayerCombatControls : MonoBehaviour
 
     private void OnPlayerTurnStartedEvent(CharacterTurnStartedEvent _)
     {
-        PlayerCombatControlsPanel.SetActive(true);
+        EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
     }
 
     private void OnPlayerTurnEndedEvent(CharacterTurnEndedEvent _)
     {
-        PlayerCombatControlsPanel.SetActive(false);
+        EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
     }
 }

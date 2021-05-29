@@ -1,15 +1,7 @@
 using Entities.Events;
-using UnityEngine;
-using UnityEngine.UI;
 
-public class XPText : MonoBehaviour
+public class XPText : TextWithQueueableUpdate
 {
-    private Text _text;
-
-    private void Awake()
-    {
-        _text = gameObject.GetComponentInChildren<Text>();
-    }
 
     private void OnEnable()
     {
@@ -23,6 +15,6 @@ public class XPText : MonoBehaviour
 
     private void UpdateXPText(CharacterXPChangedEvent characterXPChangedEvent)
     {
-        _text.text = $"XP: {characterXPChangedEvent.XP}";
+        EnqueueUpdateTextAction(new UpdateTextAction($"XP: {characterXPChangedEvent.XP}"));
     }
 }

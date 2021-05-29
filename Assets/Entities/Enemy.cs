@@ -1,6 +1,8 @@
 using Entities.Events;
 using Events.Common;
+using GameState.Events;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Entities
@@ -40,9 +42,16 @@ namespace Entities
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
         }
 
+        private async Task PerformTurn()
+        {
+            await Task.Delay(500);
+            Attack();
+            await Task.Delay(500);
+            new EndTurnEvent().Fire();
+        }
+
         private void TakeDamage(int damage)
         {
-            Debug.Log($"I am taking {damage} damage!");
             _currentHealth -= damage;
             new EnemyHealthChangedEvent(_instanceId, _currentHealth, MaxHealth).Fire();
             if (_currentHealth <= 0)
@@ -75,8 +84,10 @@ namespace Entities
             _weapon = _CurrentWeapon.GetComponent<Weapon>();
         }
 
-        // TODO: Pick proper event.
-        //private void Attack() => new CharacterAttackedEvent(_weapon.Damage).Fire();
+        private void Attack()
+        {
+            new CharacterTakeDamageEvent(_weapon.Damage).Fire();
+        }
 
         private void OnEnemyTakeDamageEvent(EnemyTakeDamageEvent enemyTakeDamageEvent)
         {
@@ -96,6 +107,8 @@ namespace Entities
         private void OnStartCombatTurnEvent(StartCombatTurnEvent _)
         {
             Debug.Log("Enemy Turn Started!");
+
+            Task.Run(PerformTurn);
         }
     }
 }
