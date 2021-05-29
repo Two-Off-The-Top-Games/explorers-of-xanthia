@@ -1,8 +1,8 @@
-using GameState.Events;
+using Entities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EndTurnButton : MonoBehaviour
+public class DealDamageButton : MonoBehaviour
 {
     private Button _button;
 
@@ -14,6 +14,6 @@ public class EndTurnButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        new EndTurnEvent().Fire();
+        new CharacterTakeDamageEvent(1).Fire();
     }
 }

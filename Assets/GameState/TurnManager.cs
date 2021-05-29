@@ -1,5 +1,5 @@
 using Events.Common;
-using Events.GameState;
+using GameState.Events;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,6 +31,7 @@ public class TurnManager : MonoBehaviour
     {
         _turnOrder = new Queue<int>(orderedParticipantIds);
         _combatIsActive = true;
+        StartNextTurn();
     }
 
     private void OnEndTurnEvent(EndTurnEvent _)
@@ -38,12 +39,18 @@ public class TurnManager : MonoBehaviour
         AdvanceTurn();
     }
 
+    private void StartNextTurn()
+    {
+        int instanceId = _turnOrder.Peek();
+        new StartCombatTurnEvent(instanceId).Fire();
+    }
+
     private void AdvanceTurn()
     {
         int instanceId = _turnOrder.Dequeue();
         new TurnEndedEvent(instanceId).Fire();
-        new StartCombatTurnEvent(instanceId).Fire();
         _turnOrder.Enqueue(instanceId);
+        StartNextTurn();
     }
 
     private void OnEndCombatEvent(EndCombatEvent _)

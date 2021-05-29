@@ -1,17 +1,25 @@
-using Events.GameState;
-using System.Collections;
+using GameState.Events;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: Move somewhere else and figure out the events for spawning enemies.
 public class CombatManager : MonoBehaviour
 {
-    public GameObject EnemyPrefab;
-    private Transform _enemiesGameObject;
-
-    private void Start()
+    private List<int> _combatParticipants = new List<int>();
+    private void OnEnable()
     {
-        // TODO: Get combat participant ids.
-        new StartCombatEvent().Fire();
+        StartGameEvent.RegisterListener(OnStartGameEvent);
+        EnemySpawnedEvent.RegisterListener(OnEnemySpawnedEvent);
+    }
+
+    private void OnStartGameEvent(StartGameEvent _)
+    {
+        _combatParticipants.Add(Globals.Instance.CharacterInstanceId);
+        new SpawnEnemiesEvent(1).Fire();
+        new StartCombatEvent(_combatParticipants.ToArray()).Fire();
+    }
+
+    private void OnEnemySpawnedEvent(EnemySpawnedEvent enemySpawnedEvent)
+    {
+        _combatParticipants.Add(enemySpawnedEvent.EnemyInstanceId);
     }
 }

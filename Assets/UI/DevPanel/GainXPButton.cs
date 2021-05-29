@@ -2,18 +2,18 @@ using Entities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DealDamageButton : MonoBehaviour
+public class GainXPButton : MonoBehaviour
 {
     private Button _button;
 
     private void Start()
     {
-        _button = gameObject.GetComponentInChildren<Button>();
+        _button = gameObject.GetComponent<Button>();
         _button.onClick.AddListener(OnButtonClicked);
     }
 
     private void OnButtonClicked()
     {
-        new CharacterTakeDamageEvent(1).Fire();
+        new CharacterGainXPEvent(10).Fire();
     }
 }

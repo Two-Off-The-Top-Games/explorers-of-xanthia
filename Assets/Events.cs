@@ -58,11 +58,11 @@ namespace Events
     /// <typeparam name="T"></typeparam>
     public abstract class TargetEvent<T> : BaseEvent where T : TargetEvent<T>
     {
-        private int _targetInstanceId;
+        public int TargetInstanceId;
 
         public TargetEvent(int targetInstanceId)
         {
-            _targetInstanceId = targetInstanceId;
+            TargetInstanceId = targetInstanceId;
         }
 
         public delegate void EventListener(T eventInfo);
@@ -86,7 +86,7 @@ namespace Events
                 return;
             }
 
-            if (s_delegates.TryGetValue(_targetInstanceId, out var eventListener))
+            if (s_delegates.TryGetValue(TargetInstanceId, out var eventListener))
             {
                 eventListener(this as T);
             }
@@ -99,11 +99,11 @@ namespace Events
     /// <typeparam name="T"></typeparam>
     public abstract class SourceEvent<T> : BaseEvent where T : SourceEvent<T>
     {
-        private int _sourceInstanceId;
+        public int SourceInstanceId;
 
         public SourceEvent(int sourceInstanceId)
         {
-            _sourceInstanceId = sourceInstanceId;
+            SourceInstanceId = sourceInstanceId;
         }
 
         public delegate void EventListener(T eventInfo);
@@ -129,7 +129,7 @@ namespace Events
 
             for (int i = 0; i < s_delegates.Count; i++)
             {
-                if (s_delegates[i].Key == _sourceInstanceId)
+                if (s_delegates[i].Key == SourceInstanceId)
                 {
                     s_delegates[i].Value(this as T);
                 }

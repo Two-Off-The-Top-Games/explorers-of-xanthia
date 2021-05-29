@@ -2,6 +2,16 @@ using Events;
 
 namespace Entities.Events
 {
+    public class RegisterCharacterInstanceIdEvent : GlobalEvent<RegisterCharacterInstanceIdEvent>
+    {
+        public RegisterCharacterInstanceIdEvent(int characterInstanceId)
+        {
+            CharacterInstanceId = characterInstanceId;
+        }
+
+        public int CharacterInstanceId;
+    }
+
     public class CharacterGainXPEvent : GlobalEvent<CharacterGainXPEvent>
     {
         public CharacterGainXPEvent(int xp)

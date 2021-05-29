@@ -1,6 +1,6 @@
 using Entities.Events;
 using Events.Common;
-using Events.GameState;
+using GameState.Events;
 using System;
 using UnityEngine;
 
@@ -20,7 +20,7 @@ namespace Entities
 
         private void Start()
         {
-            _instanceId = GetInstanceID();
+            _instanceId = gameObject.GetInstanceID();
             _xp = 0;
             _level = 1;
             _currentHealth = MaxHealth;
@@ -34,6 +34,7 @@ namespace Entities
 
         private void FireInitialEvents()
         {
+            new RegisterCharacterInstanceIdEvent(_instanceId).Fire();
             new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
             new CharacterXPChangedEvent(_xp).Fire();
             new CharacterLevelChangedEvent(_level).Fire();
@@ -126,13 +127,13 @@ namespace Entities
 
         private void OnStartCombatTurnEvent(StartCombatTurnEvent eventInfo)
         {
-            Debug.Log("My turn started!");
+            Debug.Log("Character turn started!");
             new CharacterTurnStartedEvent().Fire();
         }
 
         private void OnTurnEndedEvent(TurnEndedEvent _)
         {
-            Debug.Log("My turn ended!");
+            Debug.Log("Character turn ended!");
             new CharacterTurnEndedEvent().Fire();
         }
     }

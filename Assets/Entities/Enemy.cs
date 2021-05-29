@@ -18,7 +18,7 @@ namespace Entities
         private void Start()
         {
             _currentHealth = MaxHealth;
-            _instanceId = GetInstanceID();
+            _instanceId = gameObject.GetInstanceID();
 
             SwitchWeapon(StartingWeapon);
 
@@ -94,7 +94,7 @@ namespace Entities
 
         private void OnStartCombatTurnEvent(StartCombatTurnEvent _)
         {
-            Debug.Log("My turn started!");
+            Debug.Log("Enemy Turn Started!");
         }
     }
 }
