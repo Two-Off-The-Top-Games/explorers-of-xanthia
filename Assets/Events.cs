@@ -7,7 +7,6 @@ namespace Events
     /// This will require you to supply your own implementation details for firing events.
     /// Use the other event classes in this namespace as they have all of the necessary implementation details for each use case.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public abstract class BaseEvent
     {
         private bool _hasFired = false;
@@ -53,13 +52,17 @@ namespace Events
         }
     }
 
+    /// <summary>
+    /// You only need to call the base constructor with the target instance id for the event.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class TargetEvent<T> : BaseEvent where T : TargetEvent<T>
     {
-        private int _targetInstanceId;
+        public int TargetInstanceId;
 
         public TargetEvent(int targetInstanceId)
         {
-            _targetInstanceId = targetInstanceId;
+            TargetInstanceId = targetInstanceId;
         }
 
         public delegate void EventListener(T eventInfo);
@@ -83,20 +86,24 @@ namespace Events
                 return;
             }
 
-            if (s_delegates.TryGetValue(_targetInstanceId, out var eventListener))
+            if (s_delegates.TryGetValue(TargetInstanceId, out var eventListener))
             {
                 eventListener(this as T);
             }
         }
     }
 
+    /// <summary>
+    /// You only need to call the base constructor with the source instance id for the event.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class SourceEvent<T> : BaseEvent where T : SourceEvent<T>
     {
-        private int _sourceInstanceId;
+        public int SourceInstanceId;
 
         public SourceEvent(int sourceInstanceId)
         {
-            _sourceInstanceId = sourceInstanceId;
+            SourceInstanceId = sourceInstanceId;
         }
 
         public delegate void EventListener(T eventInfo);
@@ -122,7 +129,7 @@ namespace Events
 
             for (int i = 0; i < s_delegates.Count; i++)
             {
-                if (s_delegates[i].Key == _sourceInstanceId)
+                if (s_delegates[i].Key == SourceInstanceId)
                 {
                     s_delegates[i].Value(this as T);
                 }

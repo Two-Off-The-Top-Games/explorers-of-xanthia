@@ -1,4 +1,6 @@
 using Entities.Events;
+using Events.Common;
+using GameState.Events;
 using System;
 using UnityEngine;
 
@@ -14,9 +16,11 @@ namespace Entities
         private int _currentHealth;
         private int _xp;
         private int _level;
+        private int _instanceId;
 
         private void Start()
         {
+            _instanceId = gameObject.GetInstanceID();
             _xp = 0;
             _level = 1;
             _currentHealth = MaxHealth;
@@ -30,6 +34,7 @@ namespace Entities
 
         private void FireInitialEvents()
         {
+            new RegisterCharacterInstanceIdEvent(_instanceId).Fire();
             new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
             new CharacterXPChangedEvent(_xp).Fire();
             new CharacterLevelChangedEvent(_level).Fire();
@@ -41,6 +46,9 @@ namespace Entities
             CharacterTakeDamageEvent.RegisterListener(OnCharacterTakeDamageEvent);
             CharacterGainHealthEvent.RegisterListener(OnCharacterGainHealthEvent);
             CharacterGainMaxHealthEvent.RegisterListener(OnCharacterGainMaxHealthEvent);
+            StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
+            TurnEndedEvent.RegisterListener(_instanceId, OnTurnEndedEvent);
+            CharacterAttackEvent.RegisterListener(OnCharacterAttackedEvent);
         }
 
         private void GainXP(int xp)
@@ -95,8 +103,10 @@ namespace Entities
             _weapon = _CurrentWeapon.GetComponent<Weapon>();
         }
 
-        // TODO: Pick proper event.
-        //private void Attack() => new CharacterAttackedEvent(_weapon.Damage).Fire();
+        private void OnCharacterAttackedEvent(CharacterAttackEvent characterAttackedEvent)
+        {
+            new EnemyTakeDamageEvent(characterAttackedEvent.EnemyInstanceId, _weapon.Damage).Fire();
+        }
 
         private void OnCharacterTakeDamageEvent(CharacterTakeDamageEvent characterTakeDamageEvent)
         {
@@ -116,6 +126,18 @@ namespace Entities
         private void OnCharacterGainXPEvent(CharacterGainXPEvent characterGainXPEvent)
         {
             GainXP(characterGainXPEvent.XP);
+        }
+
+        private void OnStartCombatTurnEvent(StartCombatTurnEvent eventInfo)
+        {
+            Debug.Log("Character turn started!");
+            new CharacterTurnStartedEvent().Fire();
+        }
+
+        private void OnTurnEndedEvent(TurnEndedEvent _)
+        {
+            Debug.Log("Character turn ended!");
+            new CharacterTurnEndedEvent().Fire();
         }
     }
 }

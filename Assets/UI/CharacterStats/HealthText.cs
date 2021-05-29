@@ -1,16 +1,7 @@
 using Entities.Events;
-using UnityEngine;
-using UnityEngine.UI;
 
-public class HealthText : MonoBehaviour
+public class HealthText : TextWithQueueableUpdate
 {
-    private Text _text;
-
-    private void Awake()
-    {
-        _text = gameObject.GetComponentInChildren<Text>();
-    }
-
     private void OnEnable()
     {
         CharacterHealthChangedEvent.RegisterListener(UpdateHealthText);
@@ -23,6 +14,6 @@ public class HealthText : MonoBehaviour
 
     private void UpdateHealthText(CharacterHealthChangedEvent characterHealthChangedEvent)
     {
-        _text.text = $"HP: {characterHealthChangedEvent.CurrentHealth}/{characterHealthChangedEvent.MaxHealth}";
+        EnqueueUpdateTextAction(new UpdateTextAction($"HP: {characterHealthChangedEvent.CurrentHealth}/{characterHealthChangedEvent.MaxHealth}"));
     }
 }

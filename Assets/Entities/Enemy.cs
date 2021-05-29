@@ -1,5 +1,8 @@
 using Entities.Events;
+using Events.Common;
+using GameState.Events;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Entities
@@ -17,7 +20,7 @@ namespace Entities
         private void Start()
         {
             _currentHealth = MaxHealth;
-            _instanceId = GetInstanceID();
+            _instanceId = gameObject.GetInstanceID();
 
             SwitchWeapon(StartingWeapon);
 
@@ -33,9 +36,18 @@ namespace Entities
 
         private void RegisterEventListeners()
         {
-            EnemyTakeDamageEvent.RegisterListener(_instanceId, OnEntityTakeDamageEvent);
-            EnemyGainHealthEvent.RegisterListener(_instanceId, OnEntityGainHealthEvent);
-            EnemyGainMaxHealthEvent.RegisterListener(_instanceId, OnEntityGainMaxHealthEvent);
+            EnemyTakeDamageEvent.RegisterListener(_instanceId, OnEnemyTakeDamageEvent);
+            EnemyGainHealthEvent.RegisterListener(_instanceId, OnEnemyGainHealthEvent);
+            EnemyGainMaxHealthEvent.RegisterListener(_instanceId, OnEnemyGainMaxHealthEvent);
+            StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
+        }
+
+        private async Task PerformTurn()
+        {
+            await Task.Delay(500);
+            Attack();
+            await Task.Delay(500);
+            new EndTurnEvent().Fire();
         }
 
         private void TakeDamage(int damage)
@@ -72,22 +84,31 @@ namespace Entities
             _weapon = _CurrentWeapon.GetComponent<Weapon>();
         }
 
-        // TODO: Pick proper event.
-        //private void Attack() => new CharacterAttackedEvent(_weapon.Damage).Fire();
-
-        private void OnEntityTakeDamageEvent(EnemyTakeDamageEvent entityTakeDamageEvent)
+        private void Attack()
         {
-            TakeDamage(entityTakeDamageEvent.Damage);
+            new CharacterTakeDamageEvent(_weapon.Damage).Fire();
         }
 
-        private void OnEntityGainHealthEvent(EnemyGainHealthEvent entityGainHealthEvent)
+        private void OnEnemyTakeDamageEvent(EnemyTakeDamageEvent enemyTakeDamageEvent)
         {
-            GainHealth(entityGainHealthEvent.Health);
+            TakeDamage(enemyTakeDamageEvent.Damage);
         }
 
-        private void OnEntityGainMaxHealthEvent(EnemyGainMaxHealthEvent entityGainMaxHealthEvent)
+        private void OnEnemyGainHealthEvent(EnemyGainHealthEvent enemyGainHealthEvent)
         {
-            GainMaxHealth(entityGainMaxHealthEvent.MaxHealth);
+            GainHealth(enemyGainHealthEvent.Health);
+        }
+
+        private void OnEnemyGainMaxHealthEvent(EnemyGainMaxHealthEvent enemyGainMaxHealthEvent)
+        {
+            GainMaxHealth(enemyGainMaxHealthEvent.MaxHealth);
+        }
+
+        private void OnStartCombatTurnEvent(StartCombatTurnEvent _)
+        {
+            Debug.Log("Enemy Turn Started!");
+
+            Task.Run(PerformTurn);
         }
     }
 }

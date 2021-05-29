@@ -8,7 +8,7 @@ public class GainXPButton : MonoBehaviour
 
     private void Start()
     {
-        _button = gameObject.GetComponentInChildren<Button>();
+        _button = gameObject.GetComponent<Button>();
         _button.onClick.AddListener(OnButtonClicked);
     }
 

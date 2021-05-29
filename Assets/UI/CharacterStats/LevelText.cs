@@ -1,16 +1,7 @@
 using Entities.Events;
-using UnityEngine;
-using UnityEngine.UI;
 
-public class LevelText : MonoBehaviour
+public class LevelText : TextWithQueueableUpdate
 {
-    private Text _text;
-
-    private void Awake()
-    {
-        _text = gameObject.GetComponentInChildren<Text>();
-    }
-
     private void OnEnable()
     {
         CharacterLevelChangedEvent.RegisterListener(UpdateLevelText);
@@ -23,6 +14,6 @@ public class LevelText : MonoBehaviour
 
     private void UpdateLevelText(CharacterLevelChangedEvent characterLevelChangedEvent)
     {
-        _text.text = $"Level: {characterLevelChangedEvent.Level}";
+        EnqueueUpdateTextAction(new UpdateTextAction($"Level: {characterLevelChangedEvent.Level}"));
     }
 }

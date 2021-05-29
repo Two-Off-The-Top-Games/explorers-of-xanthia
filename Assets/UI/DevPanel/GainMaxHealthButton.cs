@@ -2,18 +2,18 @@ using Entities.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GainHealthButton : MonoBehaviour
+public class GainMaxHealthButton : MonoBehaviour
 {
     private Button _button;
 
     private void Start()
     {
-        _button = gameObject.GetComponentInChildren<Button>();
+        _button = gameObject.GetComponent<Button>();
         _button.onClick.AddListener(OnButtonClicked);
     }
 
     private void OnButtonClicked()
     {
-        new CharacterGainHealthEvent(1).Fire();
+        new CharacterGainMaxHealthEvent(1).Fire();
     }
 }
