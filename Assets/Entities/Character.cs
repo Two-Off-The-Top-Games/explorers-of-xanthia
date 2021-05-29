@@ -48,6 +48,7 @@ namespace Entities
             CharacterGainMaxHealthEvent.RegisterListener(OnCharacterGainMaxHealthEvent);
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
             TurnEndedEvent.RegisterListener(_instanceId, OnTurnEndedEvent);
+            CharacterAttackEvent.RegisterListener(OnCharacterAttackedEvent);
         }
 
         private void GainXP(int xp)
@@ -102,8 +103,10 @@ namespace Entities
             _weapon = _CurrentWeapon.GetComponent<Weapon>();
         }
 
-        // TODO: Pick proper event.
-        //private void Attack() => new CharacterAttackedEvent(_weapon.Damage).Fire();
+        private void OnCharacterAttackedEvent(CharacterAttackEvent characterAttackedEvent)
+        {
+            new EnemyTakeDamageEvent(characterAttackedEvent.EnemyInstanceId, _weapon.Damage).Fire();
+        }
 
         private void OnCharacterTakeDamageEvent(CharacterTakeDamageEvent characterTakeDamageEvent)
         {

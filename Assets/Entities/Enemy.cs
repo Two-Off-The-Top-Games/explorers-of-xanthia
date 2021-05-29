@@ -42,6 +42,7 @@ namespace Entities
 
         private void TakeDamage(int damage)
         {
+            Debug.Log($"I am taking {damage} damage!");
             _currentHealth -= damage;
             new EnemyHealthChangedEvent(_instanceId, _currentHealth, MaxHealth).Fire();
             if (_currentHealth <= 0)
