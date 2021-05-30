@@ -18,7 +18,7 @@ namespace Entities
         private int _level;
         private int _instanceId;
 
-        private void Start()
+        private void Awake()
         {
             _instanceId = gameObject.GetInstanceID();
             _xp = 0;
@@ -94,6 +94,7 @@ namespace Entities
 
         private void Die()
         {
+            new EntityDiedEvent(_instanceId).Fire();
             new CharacterDiedEvent().Fire();
         }
 
