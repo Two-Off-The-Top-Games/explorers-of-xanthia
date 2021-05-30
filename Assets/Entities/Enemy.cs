@@ -75,6 +75,7 @@ namespace Entities
 
         private void Die()
         {
+            new EntityDiedEvent(_instanceId).Fire();
             new EnemyDiedEvent(_instanceId).Fire();
         }
 

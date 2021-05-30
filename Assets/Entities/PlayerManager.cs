@@ -12,6 +12,8 @@ public class PlayerManager : MonoBehaviour
 
     private void OnSpawnPlayerEvent(SpawnPlayerEvent _)
     {
-        Instantiate(PlayerPrefab, new Vector3(-5, 0), Quaternion.identity, transform);
+        var rectTransform = GetComponent<RectTransform>();
+        float spawnLocationXCoordinate = rectTransform.rect.width / 4;
+        Instantiate(PlayerPrefab, new Vector3(-spawnLocationXCoordinate, 0), Quaternion.identity, transform);
     }
 }

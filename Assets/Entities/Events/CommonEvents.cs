@@ -4,4 +4,9 @@ namespace Events.Common
     {
         public StartCombatTurnEvent(int targetInstanceId) : base(targetInstanceId) { }
     }
+
+    public class EntityDiedEvent : SourceEvent<EntityDiedEvent>
+    {
+        public EntityDiedEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
 }

@@ -34,7 +34,6 @@ namespace Entities
 
         private void FireInitialEvents()
         {
-            Debug.Log($"Registering character id: {_instanceId}");
             new RegisterCharacterInstanceIdEvent(_instanceId).Fire();
             new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
             new CharacterXPChangedEvent(_xp).Fire();
@@ -95,6 +94,7 @@ namespace Entities
 
         private void Die()
         {
+            new EntityDiedEvent(_instanceId).Fire();
             new CharacterDiedEvent().Fire();
         }
 
