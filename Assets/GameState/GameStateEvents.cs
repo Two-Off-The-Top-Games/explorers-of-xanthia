@@ -53,4 +53,6 @@ namespace GameState.Events
 
         public int Damage;
     }
+
+    public class DisableAttackTargetsEvent : GlobalEvent<DisableAttackTargetsEvent> { }
 }

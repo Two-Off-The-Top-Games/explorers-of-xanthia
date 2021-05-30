@@ -20,8 +20,8 @@ namespace Entities
         private Action _attackedFunc;
 
         private void OnMouseDown()
-        { 
-            _attackTarget.enabled = false;
+        {
+            new DisableAttackTargetsEvent().Fire();
             _attackedFunc();
             new CharacterSelectedAttackTargetEvent().Fire();
         }
@@ -52,6 +52,7 @@ namespace Entities
             EnemyGainMaxHealthEvent.RegisterListener(_instanceId, OnEnemyGainMaxHealthEvent);
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
             EnableAttackTargetsEvent.RegisterListener(OnEnableAttackTargetsEvent);
+            DisableAttackTargetsEvent.RegisterListener(OnDisableAttackTargetsEvent);
         }
 
         private void DeregisterEventListeners()
@@ -61,6 +62,7 @@ namespace Entities
             EnemyGainMaxHealthEvent.DeregisterListener(_instanceId);
             StartCombatTurnEvent.DeregisterListener(_instanceId);
             EnableAttackTargetsEvent.DeregisterListener(OnEnableAttackTargetsEvent);
+            DisableAttackTargetsEvent.DeregisterListener(OnDisableAttackTargetsEvent);
         }
 
         private async Task PerformTurn()
@@ -138,6 +140,11 @@ namespace Entities
         {
             _attackTarget.enabled = true;
             _attackedFunc = () => TakeDamage(enableAttackTargetsEvent.Damage);
+        }
+        
+        private void OnDisableAttackTargetsEvent(DisableAttackTargetsEvent disableAttackTargetsEvent)
+        {
+            _attackTarget.enabled = false;
         }
     }
 }

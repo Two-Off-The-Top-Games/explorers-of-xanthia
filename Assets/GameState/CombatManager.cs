@@ -14,7 +14,7 @@ public class CombatManager : MonoBehaviour
     private void OnStartGameEvent(StartGameEvent _)
     {
         _combatParticipants.Add(Globals.Instance.CharacterInstanceId);
-        new SpawnEnemiesEvent(1).Fire();
+        new SpawnEnemiesEvent(3).Fire();
         new StartCombatEvent(_combatParticipants.ToArray()).Fire();
     }
 
