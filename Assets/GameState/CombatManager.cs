@@ -13,6 +13,7 @@ public class CombatManager : MonoBehaviour
 
     private void OnStartGameEvent(StartGameEvent _)
     {
+        Debug.Log($"Character Instance Id: {Globals.Instance.CharacterInstanceId}");
         _combatParticipants.Add(Globals.Instance.CharacterInstanceId);
         new SpawnEnemiesEvent(1).Fire();
         new StartCombatEvent(_combatParticipants.ToArray()).Fire();

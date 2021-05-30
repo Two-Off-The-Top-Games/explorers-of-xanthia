@@ -18,7 +18,7 @@ namespace Entities
         private int _level;
         private int _instanceId;
 
-        private void Start()
+        private void Awake()
         {
             _instanceId = gameObject.GetInstanceID();
             _xp = 0;
@@ -34,6 +34,7 @@ namespace Entities
 
         private void FireInitialEvents()
         {
+            Debug.Log($"Registering character id: {_instanceId}");
             new RegisterCharacterInstanceIdEvent(_instanceId).Fire();
             new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
             new CharacterXPChangedEvent(_xp).Fire();

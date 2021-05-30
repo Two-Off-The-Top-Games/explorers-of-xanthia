@@ -7,17 +7,23 @@ public class EnemyManager : MonoBehaviour
 {
     public GameObject EnemyPrefab;
     private Dictionary<int, GameObject> _spawnedEnemies = new Dictionary<int, GameObject>();
+    private RectTransform _rectTransform;
 
     private void OnEnable()
     {
         SpawnEnemiesEvent.RegisterListener(OnSpawnEnemiesEvent);
+        _rectTransform = GetComponent<RectTransform>();
     }
 
     private void OnSpawnEnemiesEvent(SpawnEnemiesEvent spawnEnemiesEvent)
     {
-        for(int i = 0; i < spawnEnemiesEvent.NumberToSpawn; i++)
+        float spawnLocationYOffset = _rectTransform.rect.height / (spawnEnemiesEvent.NumberToSpawn + 1);
+        float topOfContainer = _rectTransform.rect.height / 2;
+        float spawnLocationXCoordinate = _rectTransform.rect.width / 4;
+        for (int i = 0; i < spawnEnemiesEvent.NumberToSpawn; i++)
         {
-            var spawnedEnemy = Instantiate(EnemyPrefab, transform);
+            float spawnLocationYCoordinate = topOfContainer - ((i + 1) * spawnLocationYOffset);
+            var spawnedEnemy = Instantiate(EnemyPrefab, new Vector3(spawnLocationXCoordinate, spawnLocationYCoordinate), Quaternion.identity, transform);
             var enemyInstanceId = spawnedEnemy.GetInstanceID();
             _spawnedEnemies.Add(enemyInstanceId, spawnedEnemy);
             EnemyDiedEvent.RegisterListener(enemyInstanceId, OnEnemyDiedEvent);

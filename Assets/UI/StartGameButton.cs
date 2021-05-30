@@ -14,6 +14,7 @@ public class StartGameButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
+        new SpawnPlayerEvent().Fire();
         new StartGameEvent().Fire();
     }
 }

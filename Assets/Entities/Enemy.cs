@@ -17,7 +17,7 @@ namespace Entities
         private int _currentHealth;
         protected int _instanceId;
 
-        private void Start()
+        private void Awake()
         {
             _currentHealth = MaxHealth;
             _instanceId = gameObject.GetInstanceID();

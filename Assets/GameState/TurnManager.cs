@@ -24,6 +24,8 @@ public class TurnManager : MonoBehaviour
 
     private void OnStartCombatEvent(StartCombatEvent startCombatEvent)
     {
+        Debug.Log("OnStartCombatEvent");
+        Debug.Log(string.Join(", ", startCombatEvent.OrderedParticipantIds));
         StartCombat(startCombatEvent.OrderedParticipantIds);
     }
 

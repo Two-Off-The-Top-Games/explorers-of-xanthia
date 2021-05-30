@@ -41,4 +41,6 @@ namespace GameState.Events
 
         public int EnemyInstanceId;
     }
+
+    public class SpawnPlayerEvent: GlobalEvent<SpawnPlayerEvent> { }
 }
