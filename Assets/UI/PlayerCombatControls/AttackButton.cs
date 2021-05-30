@@ -1,7 +1,5 @@
 using Entities.Events;
 using GameState.Events;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +21,7 @@ public class AttackButton : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        new CharacterAttackEvent(_enemyInstanceId).Fire();
+        new CharacterAttackEvent().Fire();
     }
 
     private void OnEnemySpawnedEvent(EnemySpawnedEvent enemySpawnedEvent)

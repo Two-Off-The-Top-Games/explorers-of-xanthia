@@ -48,7 +48,8 @@ namespace Entities
             CharacterGainMaxHealthEvent.RegisterListener(OnCharacterGainMaxHealthEvent);
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
             TurnEndedEvent.RegisterListener(_instanceId, OnTurnEndedEvent);
-            CharacterAttackEvent.RegisterListener(OnCharacterAttackedEvent);
+            CharacterAttackEvent.RegisterListener(OnCharacterAttackEvent);
+            CharacterSelectedAttackTargetEvent.RegisterListener(OnCharacterSelectedAttackTargetEvent);
         }
 
         private void GainXP(int xp)
@@ -104,9 +105,9 @@ namespace Entities
             _weapon = _CurrentWeapon.GetComponent<Weapon>();
         }
 
-        private void OnCharacterAttackedEvent(CharacterAttackEvent characterAttackedEvent)
+        private void OnCharacterAttackEvent(CharacterAttackEvent characterAttackedEvent)
         {
-            new EnemyTakeDamageEvent(characterAttackedEvent.EnemyInstanceId, _weapon.Damage).Fire();
+            new EnableAttackTargetsEvent(_weapon.Damage).Fire();
         }
 
         private void OnCharacterTakeDamageEvent(CharacterTakeDamageEvent characterTakeDamageEvent)
@@ -139,6 +140,12 @@ namespace Entities
         {
             Debug.Log("Character turn ended!");
             new CharacterTurnEndedEvent().Fire();
+        }
+
+        private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent _)
+        {
+            // Won't need to do anything now, but in the future this may be used for AP or some other needed control flow.
+            Debug.Log("Character selected attack target!");
         }
     }
 }

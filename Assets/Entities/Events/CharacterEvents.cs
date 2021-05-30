@@ -93,13 +93,7 @@ namespace Entities.Events
 
     public class CharacterTurnEndedEvent : GlobalEvent<CharacterTurnEndedEvent> { }
 
-    public class CharacterAttackEvent : GlobalEvent<CharacterAttackEvent>
-    {
-        public CharacterAttackEvent(int enemyInstanceId) 
-        {
-            EnemyInstanceId = enemyInstanceId;
-        }
+    public class CharacterAttackEvent : GlobalEvent<CharacterAttackEvent> { }
 
-        public int EnemyInstanceId;
-    }
+    public class CharacterSelectedAttackTargetEvent : GlobalEvent<CharacterSelectedAttackTargetEvent> { }
 }

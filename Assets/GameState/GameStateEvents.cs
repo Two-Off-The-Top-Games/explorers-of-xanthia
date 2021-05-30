@@ -43,4 +43,16 @@ namespace GameState.Events
     }
 
     public class SpawnPlayerEvent: GlobalEvent<SpawnPlayerEvent> { }
+
+    public class EnableAttackTargetsEvent : GlobalEvent<EnableAttackTargetsEvent> 
+    {
+        public EnableAttackTargetsEvent(int damage)
+        {
+            Damage = damage;
+        }
+
+        public int Damage;
+    }
+
+    public class DisableAttackTargetsEvent : GlobalEvent<DisableAttackTargetsEvent> { }
 }

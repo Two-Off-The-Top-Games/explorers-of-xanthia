@@ -16,9 +16,20 @@ namespace Entities
         private Weapon _weapon;
         private int _currentHealth;
         protected int _instanceId;
+        private BoxCollider2D _attackTarget;
+        private Action _attackedFunc;
+
+        private void OnMouseDown()
+        {
+            new DisableAttackTargetsEvent().Fire();
+            _attackedFunc();
+            new CharacterSelectedAttackTargetEvent().Fire();
+        }
 
         private void Awake()
         {
+            _attackTarget = GetComponent<BoxCollider2D>();
+            _attackTarget.enabled = false;
             _currentHealth = MaxHealth;
             _instanceId = gameObject.GetInstanceID();
 
@@ -40,6 +51,18 @@ namespace Entities
             EnemyGainHealthEvent.RegisterListener(_instanceId, OnEnemyGainHealthEvent);
             EnemyGainMaxHealthEvent.RegisterListener(_instanceId, OnEnemyGainMaxHealthEvent);
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
+            EnableAttackTargetsEvent.RegisterListener(OnEnableAttackTargetsEvent);
+            DisableAttackTargetsEvent.RegisterListener(OnDisableAttackTargetsEvent);
+        }
+
+        private void DeregisterEventListeners()
+        {
+            EnemyTakeDamageEvent.DeregisterListener(_instanceId);
+            EnemyGainHealthEvent.DeregisterListener(_instanceId);
+            EnemyGainMaxHealthEvent.DeregisterListener(_instanceId);
+            StartCombatTurnEvent.DeregisterListener(_instanceId);
+            EnableAttackTargetsEvent.DeregisterListener(OnEnableAttackTargetsEvent);
+            DisableAttackTargetsEvent.DeregisterListener(OnDisableAttackTargetsEvent);
         }
 
         private async Task PerformTurn()
@@ -75,6 +98,7 @@ namespace Entities
 
         private void Die()
         {
+            DeregisterEventListeners();
             new EntityDiedEvent(_instanceId).Fire();
             new EnemyDiedEvent(_instanceId).Fire();
         }
@@ -110,6 +134,17 @@ namespace Entities
             Debug.Log("Enemy Turn Started!");
 
             Task.Run(PerformTurn);
+        }
+
+        private void OnEnableAttackTargetsEvent(EnableAttackTargetsEvent enableAttackTargetsEvent)
+        {
+            _attackTarget.enabled = true;
+            _attackedFunc = () => TakeDamage(enableAttackTargetsEvent.Damage);
+        }
+        
+        private void OnDisableAttackTargetsEvent(DisableAttackTargetsEvent disableAttackTargetsEvent)
+        {
+            _attackTarget.enabled = false;
         }
     }
 }
