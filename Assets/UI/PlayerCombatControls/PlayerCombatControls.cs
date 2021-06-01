@@ -17,25 +17,21 @@ public class PlayerCombatControls : UIComponentWithQueueableActions
 
     private void OnPlayerTurnStartedEvent(CharacterTurnStartedEvent _)
     {
-        Debug.Log("Player Turn Started!");
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
     }
 
     private void OnPlayerTurnEndedEvent(CharacterTurnEndedEvent _)
     {
-        Debug.Log("Player Turn Ended!");
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
     }
 
     private void OnCharacterAttackEvent(CharacterAttackEvent _)
     {
-        Debug.Log("Player Attacked!");
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
     }
 
     private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent _)
     {
-        Debug.Log("Player Selected Attack Target!");
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
     }
 }

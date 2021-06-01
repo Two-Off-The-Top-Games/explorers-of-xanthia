@@ -138,11 +138,8 @@ namespace Entities
         {
             Debug.Log("Character turn started!");
             _currentActionPoints = ActionPoints;
-            Debug.Log("Character current action points reset!");
             new CharacterActionPointsChangedEvent(_currentActionPoints, ActionPoints).Fire();
-            Debug.Log("Firing CharacterTurnStartedEvent!");
             new CharacterTurnStartedEvent().Fire();
-            Debug.Log("Fired CharacterTurnStartedEvent!");
         }
 
         private void OnTurnEndedEvent(TurnEndedEvent _)
