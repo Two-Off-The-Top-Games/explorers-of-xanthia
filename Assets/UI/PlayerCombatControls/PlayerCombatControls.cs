@@ -17,7 +17,6 @@ public class PlayerCombatControls : UIComponentWithQueueableActions
 
     private void OnPlayerTurnStartedEvent(CharacterTurnStartedEvent _)
     {
-        Debug.Log("Player Turn Started!");
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
     }
 

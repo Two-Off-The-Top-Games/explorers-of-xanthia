@@ -1,21 +1,19 @@
 using Entities.Events;
-using GameState.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AttackButton : MonoBehaviour
+public class AttackButton : UIComponentWithQueueableActions
 {
     private Button _button;
-    private int _enemyInstanceId;
 
     private void OnEnable()
     {
-        EnemySpawnedEvent.RegisterListener(OnEnemySpawnedEvent);
+        CharacterActionPointsChangedEvent.RegisterListener(OnCharacterActionPointsChangedEvent);
+        _button = gameObject.GetComponent<Button>();
     }
 
     private void Start()
     {
-        _button = gameObject.GetComponent<Button>();
         _button.onClick.AddListener(OnButtonClicked);
     }
 
@@ -24,8 +22,9 @@ public class AttackButton : MonoBehaviour
         new CharacterAttackEvent().Fire();
     }
 
-    private void OnEnemySpawnedEvent(EnemySpawnedEvent enemySpawnedEvent)
+    private void OnCharacterActionPointsChangedEvent(CharacterActionPointsChangedEvent characterActionPointsChangedEvent)
     {
-        _enemyInstanceId = enemySpawnedEvent.EnemyInstanceId;
+        EnqueueAction(() => _button.interactable = characterActionPointsChangedEvent.CurrentActionPoints > 0);
+        
     }
 }

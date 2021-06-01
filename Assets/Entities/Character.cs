@@ -10,12 +10,14 @@ namespace Entities
     {
         public GameObject StartingWeapon;
         public int MaxHealth;
+        public int ActionPoints;
 
         private GameObject _CurrentWeapon;
         private Weapon _weapon;
         private int _currentHealth;
         private int _xp;
         private int _level;
+        private int _currentActionPoints;
         private int _instanceId;
 
         private void Awake()
@@ -24,6 +26,7 @@ namespace Entities
             _xp = 0;
             _level = 1;
             _currentHealth = MaxHealth;
+            _currentActionPoints = ActionPoints;
 
             SwitchWeapon(StartingWeapon);
 
@@ -38,6 +41,7 @@ namespace Entities
             new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
             new CharacterXPChangedEvent(_xp).Fire();
             new CharacterLevelChangedEvent(_level).Fire();
+            new CharacterActionPointsChangedEvent(_currentActionPoints, ActionPoints).Fire();
         }
 
         private void RegisterEventListeners()
@@ -133,6 +137,8 @@ namespace Entities
         private void OnStartCombatTurnEvent(StartCombatTurnEvent eventInfo)
         {
             Debug.Log("Character turn started!");
+            _currentActionPoints = ActionPoints;
+            new CharacterActionPointsChangedEvent(_currentActionPoints, ActionPoints).Fire();
             new CharacterTurnStartedEvent().Fire();
         }
 
@@ -144,8 +150,8 @@ namespace Entities
 
         private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent _)
         {
-            // Won't need to do anything now, but in the future this may be used for AP or some other needed control flow.
-            Debug.Log("Character selected attack target!");
+            _currentActionPoints -= 1;
+            new CharacterActionPointsChangedEvent(_currentActionPoints, ActionPoints).Fire();
         }
     }
 }
