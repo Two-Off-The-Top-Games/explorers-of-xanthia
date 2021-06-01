@@ -59,6 +59,18 @@ namespace Entities.Events
         public int MaxHealth;
     }
 
+    public class CharacterActionPointsChangedEvent : GlobalEvent<CharacterActionPointsChangedEvent>
+    {
+        public CharacterActionPointsChangedEvent(int currentActionPoints, int maxActionPoints)
+        {
+            CurrentActionPoints = currentActionPoints;
+            MaxActionPoints = maxActionPoints;
+        }
+
+        public int CurrentActionPoints;
+        public int MaxActionPoints;
+    }
+
     public class CharacterTakeDamageEvent : GlobalEvent<CharacterTakeDamageEvent>
     {
         public CharacterTakeDamageEvent(int damage)

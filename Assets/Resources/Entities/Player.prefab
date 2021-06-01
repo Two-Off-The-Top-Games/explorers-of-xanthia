@@ -51,6 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartingWeapon: {fileID: 4615739129417186831, guid: 633720af50af5354fb948e7a70022baf, type: 3}
   MaxHealth: 20
+  ActionPoints: 3
 --- !u!212 &783261987568278840
 SpriteRenderer:
   m_ObjectHideFlags: 0
