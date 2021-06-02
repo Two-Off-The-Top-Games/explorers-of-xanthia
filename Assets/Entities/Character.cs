@@ -38,7 +38,7 @@ namespace Entities
         private void FireInitialEvents()
         {
             new RegisterCharacterInstanceIdEvent(_instanceId).Fire();
-            new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
+            new CharacterHealthChangedEvent(_currentHealth, MaxHealth, 0).Fire();
             new CharacterXPChangedEvent(_xp).Fire();
             new CharacterLevelChangedEvent(_level).Fire();
             new CharacterActionPointsChangedEvent(_currentActionPoints, ActionPoints).Fire();
@@ -77,7 +77,7 @@ namespace Entities
         private void TakeDamage(int damage)
         {
             _currentHealth -= damage;
-            new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
+            new CharacterHealthChangedEvent(_currentHealth, MaxHealth, -damage).Fire();
             if (_currentHealth <= 0)
             {
                 Die();
@@ -87,13 +87,13 @@ namespace Entities
         private void GainHealth(int health)
         {
             _currentHealth = Math.Min(_currentHealth + health, MaxHealth);
-            new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
+            new CharacterHealthChangedEvent(_currentHealth, MaxHealth, health).Fire();
         }
 
         private void GainMaxHealth(int health)
         {
             MaxHealth += health;
-            new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
+            new CharacterHealthChangedEvent(_currentHealth, MaxHealth, 0).Fire();
             GainHealth(health);
         }
 
