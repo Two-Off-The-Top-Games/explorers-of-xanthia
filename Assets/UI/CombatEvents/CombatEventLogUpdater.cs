@@ -25,7 +25,6 @@ public class CombatEventLogUpdater : UIComponentWithQueueableActions
             lock(_locker)
             {
                 float currentScrollPosition = CombatEventLogScrollRect.verticalNormalizedPosition;
-                Debug.Log($"Current Scroll Positon: {currentScrollPosition}");
 
                 CombatEventLogText.text += $"{combatEvent.CombatEventText}\n";
                 Canvas.ForceUpdateCanvases();
