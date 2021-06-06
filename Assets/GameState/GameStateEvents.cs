@@ -55,4 +55,14 @@ namespace GameState.Events
     }
 
     public class DisableAttackTargetsEvent : GlobalEvent<DisableAttackTargetsEvent> { }
+
+    public class CombatEvent : GlobalEvent<CombatEvent>
+    {
+        public CombatEvent(string combatEventText)
+        {
+            CombatEventText = combatEventText;
+        }
+
+        public string CombatEventText;
+    }
 }
