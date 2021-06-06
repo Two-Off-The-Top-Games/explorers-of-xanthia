@@ -1191,7 +1191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 5286156105453446373, guid: 9c25d56aeb51c8f49a1803ecab3c50b1, type: 3}
-  PercentOfAvailableVerticalScreenSpace: 0.66
+  PercentOfAvailableVerticalScreenSpace: 66.7
 --- !u!114 &487655598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1205,7 +1205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 6216873017422867032, guid: 08f85aa4e97a6494caf50392937dccec, type: 3}
-  PercentOfAvailableVerticalScreenSpace: 0.66
+  PercentOfAvailableVerticalScreenSpace: 66.7
 --- !u!1001 &490619165
 PrefabInstance:
   m_ObjectHideFlags: 0

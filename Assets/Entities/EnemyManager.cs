@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public GameObject EnemyPrefab;
+    [Range(0.01f, 100f)]
     public float PercentOfAvailableVerticalScreenSpace;
     private Dictionary<int, GameObject> _spawnedEnemies = new Dictionary<int, GameObject>();
     private RectTransform _rectTransform;
@@ -19,7 +20,7 @@ public class EnemyManager : MonoBehaviour
     private void OnSpawnEnemiesEvent(SpawnEnemiesEvent spawnEnemiesEvent)
     {
         float spawnLocationYOffset = _rectTransform.rect.height / (spawnEnemiesEvent.NumberToSpawn + 1);
-        float scaledSpawnLocationYOffest = spawnLocationYOffset * PercentOfAvailableVerticalScreenSpace;
+        float scaledSpawnLocationYOffest = spawnLocationYOffset * (PercentOfAvailableVerticalScreenSpace / 100f);
         float topOfContainer = _rectTransform.rect.height / 2;
         float spawnLocationXCoordinate = _rectTransform.rect.width / 4;
         for (int i = 0; i < spawnEnemiesEvent.NumberToSpawn; i++)
