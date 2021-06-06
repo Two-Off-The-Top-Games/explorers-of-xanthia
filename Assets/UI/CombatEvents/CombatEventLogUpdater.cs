@@ -7,6 +7,7 @@ public class CombatEventLogUpdater : UIComponentWithQueueableActions
 {
     public TextMeshProUGUI CombatEventLogText;
     public ScrollRect CombatEventLogScrollRect;
+    private static readonly object _locker = new object();
     private void OnEnable()
     {
         CombatEvent.RegisterListener(OnCombatEvent);
@@ -21,13 +22,17 @@ public class CombatEventLogUpdater : UIComponentWithQueueableActions
     {
         EnqueueAction(() =>
         {
-            float currentScrollPosition = CombatEventLogScrollRect.verticalNormalizedPosition;
-
-            CombatEventLogText.text += $"{combatEvent.CombatEventText}\n";
-            Canvas.ForceUpdateCanvases();
-            if (!(currentScrollPosition > 0f))
+            lock(_locker)
             {
-                CombatEventLogScrollRect.verticalNormalizedPosition = 0;
+                float currentScrollPosition = CombatEventLogScrollRect.verticalNormalizedPosition;
+                Debug.Log($"Current Scroll Positon: {currentScrollPosition}");
+
+                CombatEventLogText.text += $"{combatEvent.CombatEventText}\n";
+                Canvas.ForceUpdateCanvases();
+                if (currentScrollPosition <= 0.01f)
+                {
+                    CombatEventLogScrollRect.verticalNormalizedPosition = 0;
+                }
             }
         });
     }

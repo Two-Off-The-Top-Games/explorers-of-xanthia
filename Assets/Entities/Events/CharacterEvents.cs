@@ -49,16 +49,14 @@ namespace Entities.Events
 
     public class CharacterHealthChangedEvent : GlobalEvent<CharacterHealthChangedEvent>
     {
-        public CharacterHealthChangedEvent(int currentHealth, int maxHealth, int change)
+        public CharacterHealthChangedEvent(int currentHealth, int maxHealth)
         {
             CurrentHealth = currentHealth;
             MaxHealth = maxHealth;
-            Change = change;
         }
 
         public int CurrentHealth;
         public int MaxHealth;
-        public int Change;
     }
 
     public class CharacterActionPointsChangedEvent : GlobalEvent<CharacterActionPointsChangedEvent>
