@@ -115,7 +115,23 @@ namespace Entities.Events
         public CharacterTurnEndedEvent(int sourceInstanceId) : base(sourceInstanceId) { }
     }
 
-    public class CharacterAttackEvent : GlobalEvent<CharacterAttackEvent> { }
+    public class CharacterAttackEvent : TargetEvent<CharacterAttackEvent> 
+    {
+        public CharacterAttackEvent(int targetInstanceId) : base(targetInstanceId) { }
+    }
 
-    public class CharacterSelectedAttackTargetEvent : GlobalEvent<CharacterSelectedAttackTargetEvent> { }
+    public class CharacterSelectedAttackTargetEvent : TargetEvent<CharacterSelectedAttackTargetEvent> 
+    {
+        public CharacterSelectedAttackTargetEvent(int targetInstanceId) : base(targetInstanceId) { }
+    }
+
+    public class CharacterStartedAttackEvent : SourceEvent<CharacterStartedAttackEvent>
+    {
+        public CharacterStartedAttackEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
+
+    public class CharacterFinishedAttackEvent : SourceEvent<CharacterFinishedAttackEvent>
+    {
+        public CharacterFinishedAttackEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
 }

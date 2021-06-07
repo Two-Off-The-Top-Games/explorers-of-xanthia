@@ -64,11 +64,13 @@ namespace GameState.Events
 
     public class EnableAttackTargetsEvent : GlobalEvent<EnableAttackTargetsEvent> 
     {
-        public EnableAttackTargetsEvent(int damage)
+        public EnableAttackTargetsEvent(int characterInstanceId, int damage)
         {
+            CharacterInstanceId = characterInstanceId;
             Damage = damage;
         }
 
+        public int CharacterInstanceId;
         public int Damage;
     }
 

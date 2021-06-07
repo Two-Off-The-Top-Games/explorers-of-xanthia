@@ -1,4 +1,3 @@
-using Entities;
 using Entities.Events;
 using GameState.Events;
 using UnityEngine;
@@ -11,14 +10,14 @@ public class PlayerCombatControls : UIComponentWithQueueableActions
     {
         PlayerCombatControlsPanel.SetActive(false);
         CharacterSpawnedEvent.RegisterListener(OnCharacterSpawnedEvent);
-        CharacterAttackEvent.RegisterListener(OnCharacterAttackEvent);
-        CharacterSelectedAttackTargetEvent.RegisterListener(OnCharacterSelectedAttackTargetEvent);
     }
 
     private void OnCharacterSpawnedEvent(CharacterSpawnedEvent characterSpawnedEvent)
     {
         CharacterTurnStartedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnStartedEvent);
         CharacterTurnEndedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnEndedEvent);
+        CharacterStartedAttackEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterStartedAttackEvent);
+        CharacterFinishedAttackEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterFinishedAttackEvent);
     }
 
     private void OnCharacterTurnStartedEvent(CharacterTurnStartedEvent _)
@@ -31,12 +30,12 @@ public class PlayerCombatControls : UIComponentWithQueueableActions
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
     }
 
-    private void OnCharacterAttackEvent(CharacterAttackEvent _)
+    private void OnCharacterStartedAttackEvent(CharacterStartedAttackEvent _)
     {
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
     }
 
-    private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent _)
+    private void OnCharacterFinishedAttackEvent(CharacterFinishedAttackEvent _)
     {
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
     }

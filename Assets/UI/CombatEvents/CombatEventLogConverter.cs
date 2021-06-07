@@ -7,13 +7,11 @@ public class CombatEventLogConverter : MonoBehaviour
     private void OnEnable()
     {
         CharacterSpawnedEvent.RegisterListener(OnCharacterSpawnedEvent);
-        CharacterSelectedAttackTargetEvent.RegisterListener(OnCharacterSelectedAttackTargetEvent);
         EndTurnEvent.RegisterListener(OnEndTurnEvent);
     }
 
     private void OnDisable()
     {
-        CharacterSelectedAttackTargetEvent.DeregisterListener(OnCharacterSelectedAttackTargetEvent);
         EndTurnEvent.DeregisterListener(OnEndTurnEvent);
     }
 
@@ -24,6 +22,7 @@ public class CombatEventLogConverter : MonoBehaviour
         CharacterActionPointsChangedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterActionPointsChangedEvent);
         CharacterTurnStartedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnStartedEvent);
         CharacterTurnEndedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnEndedEvent);
+        CharacterFinishedAttackEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterFinishedAttackEvent);
     }
 
     private void OnCharacterDiedEvent(CharacterDiedEvent characterDiedEvent)
@@ -33,9 +32,10 @@ public class CombatEventLogConverter : MonoBehaviour
         CharacterActionPointsChangedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterActionPointsChangedEvent);
         CharacterTurnStartedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterTurnStartedEvent);
         CharacterTurnEndedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterTurnEndedEvent);
+        CharacterFinishedAttackEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterFinishedAttackEvent);
     }
 
-    private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent characterSelectedAttackTargetEvent)
+    private void OnCharacterFinishedAttackEvent(CharacterFinishedAttackEvent characterFinishedAttackEvent)
     {
         new CombatEvent("Character attacked an enemy.").Fire();
     }

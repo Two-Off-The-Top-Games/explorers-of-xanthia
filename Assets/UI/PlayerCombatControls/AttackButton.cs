@@ -1,15 +1,17 @@
 using Entities.Events;
 using GameState.Events;
-using UnityEngine;
+using System;
 using UnityEngine.UI;
 
 public class AttackButton : UIComponentWithQueueableActions
 {
     private Button _button;
+    private Action _characterAttack;
 
     private void OnEnable()
     {
         _button = gameObject.GetComponent<Button>();
+        CharacterSpawnedEvent.RegisterListener(OnCharacterSpawnedEvent);
     }
 
     private void Start()
@@ -19,7 +21,7 @@ public class AttackButton : UIComponentWithQueueableActions
 
     private void OnButtonClicked()
     {
-        new CharacterAttackEvent().Fire();
+        _characterAttack();
     }
 
     private void OnCharacterActionPointsChangedEvent(CharacterActionPointsChangedEvent characterActionPointsChangedEvent)
@@ -36,6 +38,7 @@ public class AttackButton : UIComponentWithQueueableActions
     private void OnCharacterTurnStartedEvent(CharacterTurnStartedEvent characterTurnStartedEvent)
     {
         CharacterActionPointsChangedEvent.RegisterListener(characterTurnStartedEvent.SourceInstanceId, OnCharacterActionPointsChangedEvent);
+        _characterAttack = () => new CharacterAttackEvent(characterTurnStartedEvent.SourceInstanceId).Fire(); ;
     }
 
     private void OnCharacterTurnEndedEvent(CharacterTurnEndedEvent characterTurnEndedEvent)
