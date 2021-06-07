@@ -37,7 +37,6 @@ namespace Entities
 
         private void FireInitialEvents()
         {
-            new RegisterCharacterInstanceIdEvent(_instanceId).Fire();
             new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
             new CharacterXPChangedEvent(_xp).Fire();
             new CharacterLevelChangedEvent(_level).Fire();

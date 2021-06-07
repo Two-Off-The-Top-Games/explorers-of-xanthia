@@ -3,22 +3,28 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public GameObject PlayerPrefab;
+    public GameObject CharacterPrefab;
     [Range(0.01f, 100f)]
     public float PercentOfAvailableVerticalScreenSpace;
 
     private void OnEnable()
     {
-        SpawnPlayerEvent.RegisterListener(OnSpawnPlayerEvent);
+        SpawnCharactersEvent.RegisterListener(OnSpawnCharactersEvent);
     }
 
-    private void OnSpawnPlayerEvent(SpawnPlayerEvent _)
+    private void OnSpawnCharactersEvent(SpawnCharactersEvent spawnCharactersEvent)
     {
         var rectTransform = GetComponent<RectTransform>();
+        float spawnLocationYOffset = rectTransform.rect.height / (spawnCharactersEvent.NumberToSpawn + 1);
+        float scaledSpawnLocationYOffest = spawnLocationYOffset * (PercentOfAvailableVerticalScreenSpace / 100f);
         float topOfContainer = rectTransform.rect.height / 2;
         float spawnLocationXCoordinate = rectTransform.rect.width / 4;
-        float scaledSpawnLocationYOffset = (rectTransform.rect.height * (PercentOfAvailableVerticalScreenSpace / 100f)) / 2;
-        float spawnLocationYCoordinate = topOfContainer - scaledSpawnLocationYOffset;
-        Instantiate(PlayerPrefab, new Vector3(-spawnLocationXCoordinate, spawnLocationYCoordinate), Quaternion.identity, transform);
+        for (int i = 0; i < spawnCharactersEvent.NumberToSpawn; i++)
+        {
+            float spawnLocationYCoordinate = topOfContainer - ((i + 1) * scaledSpawnLocationYOffest);
+            var spawnedCharacter = Instantiate(CharacterPrefab, new Vector3(-spawnLocationXCoordinate, spawnLocationYCoordinate), Quaternion.identity, transform);
+            var characterInstanceId = spawnedCharacter.GetInstanceID();
+            new CharacterSpawnedEvent(characterInstanceId).Fire();
+        }
     }
 }
