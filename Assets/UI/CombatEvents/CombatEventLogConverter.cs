@@ -9,16 +9,12 @@ public class CombatEventLogConverter : MonoBehaviour
         CharacterSpawnedEvent.RegisterListener(OnCharacterSpawnedEvent);
         CharacterSelectedAttackTargetEvent.RegisterListener(OnCharacterSelectedAttackTargetEvent);
         EndTurnEvent.RegisterListener(OnEndTurnEvent);
-        CharacterTurnStartedEvent.RegisterListener(OnCharacterTurnStartedEvent);
-        CharacterTurnEndedEvent.RegisterListener(OnCharacterTurnEndedEvent);
     }
 
     private void OnDisable()
     {
         CharacterSelectedAttackTargetEvent.DeregisterListener(OnCharacterSelectedAttackTargetEvent);
         EndTurnEvent.DeregisterListener(OnEndTurnEvent);
-        CharacterTurnStartedEvent.DeregisterListener(OnCharacterTurnStartedEvent);
-        CharacterTurnEndedEvent.DeregisterListener(OnCharacterTurnEndedEvent);
     }
 
     private void OnCharacterSpawnedEvent(CharacterSpawnedEvent characterSpawnedEvent)
@@ -26,6 +22,8 @@ public class CombatEventLogConverter : MonoBehaviour
         CharacterDiedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterDiedEvent);
         CharacterHealthChangedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterHealthChangedEvent);
         CharacterActionPointsChangedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterActionPointsChangedEvent);
+        CharacterTurnStartedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnStartedEvent);
+        CharacterTurnEndedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnEndedEvent);
     }
 
     private void OnCharacterDiedEvent(CharacterDiedEvent characterDiedEvent)
@@ -33,6 +31,8 @@ public class CombatEventLogConverter : MonoBehaviour
         CharacterDiedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterDiedEvent);
         CharacterHealthChangedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterHealthChangedEvent);
         CharacterActionPointsChangedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterActionPointsChangedEvent);
+        CharacterTurnStartedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterTurnStartedEvent);
+        CharacterTurnEndedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterTurnEndedEvent);
     }
 
     private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent characterSelectedAttackTargetEvent)

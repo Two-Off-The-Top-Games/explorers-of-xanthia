@@ -1,5 +1,6 @@
 using Entities;
 using Entities.Events;
+using GameState.Events;
 using UnityEngine;
 
 public class PlayerCombatControls : UIComponentWithQueueableActions
@@ -9,10 +10,15 @@ public class PlayerCombatControls : UIComponentWithQueueableActions
     private void OnEnable()
     {
         PlayerCombatControlsPanel.SetActive(false);
-        CharacterTurnStartedEvent.RegisterListener(OnPlayerTurnStartedEvent);
-        CharacterTurnEndedEvent.RegisterListener(OnPlayerTurnEndedEvent);
+        CharacterSpawnedEvent.RegisterListener(OnCharacterSpawnedEvent);
         CharacterAttackEvent.RegisterListener(OnCharacterAttackEvent);
         CharacterSelectedAttackTargetEvent.RegisterListener(OnCharacterSelectedAttackTargetEvent);
+    }
+
+    private void OnCharacterSpawnedEvent(CharacterSpawnedEvent characterSpawnedEvent)
+    {
+        CharacterTurnStartedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnPlayerTurnStartedEvent);
+        CharacterTurnEndedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnPlayerTurnEndedEvent);
     }
 
     private void OnPlayerTurnStartedEvent(CharacterTurnStartedEvent _)

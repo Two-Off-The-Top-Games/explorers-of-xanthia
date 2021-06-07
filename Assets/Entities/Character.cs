@@ -141,13 +141,13 @@ namespace Entities
             Debug.Log("Character turn started!");
             _currentActionPoints = ActionPoints;
             new CharacterActionPointsChangedEvent(_instanceId, _currentActionPoints, ActionPoints).Fire();
-            new CharacterTurnStartedEvent().Fire();
+            new CharacterTurnStartedEvent(_instanceId).Fire();
         }
 
         private void OnTurnEndedEvent(TurnEndedEvent _)
         {
             Debug.Log("Character turn ended!");
-            new CharacterTurnEndedEvent().Fire();
+            new CharacterTurnEndedEvent(_instanceId).Fire();
         }
 
         private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent _)

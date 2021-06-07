@@ -105,10 +105,15 @@ namespace Entities.Events
         public int MaxHealth;
     }
 
-    // Potentially change these later to target/source, but may never need that extra funcitonality.
-    public class CharacterTurnStartedEvent : GlobalEvent<CharacterTurnStartedEvent> { }
+    public class CharacterTurnStartedEvent : SourceEvent<CharacterTurnStartedEvent> 
+    {
+        public CharacterTurnStartedEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
 
-    public class CharacterTurnEndedEvent : GlobalEvent<CharacterTurnEndedEvent> { }
+    public class CharacterTurnEndedEvent : SourceEvent<CharacterTurnEndedEvent>
+    {
+        public CharacterTurnEndedEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
 
     public class CharacterAttackEvent : GlobalEvent<CharacterAttackEvent> { }
 
