@@ -37,47 +37,47 @@ namespace Entities
 
         private void FireInitialEvents()
         {
-            new RegisterCharacterInstanceIdEvent(_instanceId).Fire();
-            new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
-            new CharacterXPChangedEvent(_xp).Fire();
-            new CharacterLevelChangedEvent(_level).Fire();
-            new CharacterActionPointsChangedEvent(_currentActionPoints, ActionPoints).Fire();
+            new CharacterHealthChangedEvent(_instanceId, _currentHealth, _currentHealth, MaxHealth, MaxHealth).Fire();
+            new CharacterXPChangedEvent(_instanceId, _xp).Fire();
+            new CharacterLevelChangedEvent(_instanceId, _level).Fire();
+            new CharacterActionPointsChangedEvent(_instanceId, _currentActionPoints, ActionPoints).Fire();
         }
 
         private void RegisterEventListeners()
         {
-            CharacterGainXPEvent.RegisterListener(OnCharacterGainXPEvent);
-            CharacterTakeDamageEvent.RegisterListener(OnCharacterTakeDamageEvent);
-            CharacterGainHealthEvent.RegisterListener(OnCharacterGainHealthEvent);
-            CharacterGainMaxHealthEvent.RegisterListener(OnCharacterGainMaxHealthEvent);
+            CharacterGainXPEvent.RegisterListener(_instanceId, OnCharacterGainXPEvent);
+            CharacterTakeDamageEvent.RegisterListener(_instanceId, OnCharacterTakeDamageEvent);
+            CharacterGainHealthEvent.RegisterListener(_instanceId, OnCharacterGainHealthEvent);
+            CharacterGainMaxHealthEvent.RegisterListener(_instanceId, OnCharacterGainMaxHealthEvent);
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
             TurnEndedEvent.RegisterListener(_instanceId, OnTurnEndedEvent);
-            CharacterAttackEvent.RegisterListener(OnCharacterAttackEvent);
-            CharacterSelectedAttackTargetEvent.RegisterListener(OnCharacterSelectedAttackTargetEvent);
+            CharacterAttackEvent.RegisterListener(_instanceId, OnCharacterAttackEvent);
+            CharacterSelectedAttackTargetEvent.RegisterListener(_instanceId, OnCharacterSelectedAttackTargetEvent);
         }
 
         private void GainXP(int xp)
         {
             _xp += xp;
-            new CharacterXPChangedEvent(_xp).Fire();
+            new CharacterXPChangedEvent(_instanceId, _xp).Fire();
             while (_xp >= 100)
             {
                 LevelUp();
                 _xp -= 100;
-                new CharacterXPChangedEvent(_xp).Fire();
+                new CharacterXPChangedEvent(_instanceId, _xp).Fire();
             }
         }
 
         private void LevelUp()
         {
             _level += 1;
-            new CharacterLevelChangedEvent(_level).Fire();
+            new CharacterLevelChangedEvent(_instanceId, _level).Fire();
         }
 
         private void TakeDamage(int damage)
         {
+            int previousHealth = _currentHealth;
             _currentHealth -= damage;
-            new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
+            new CharacterHealthChangedEvent(_instanceId, previousHealth, _currentHealth, MaxHealth, MaxHealth).Fire();
             if (_currentHealth <= 0)
             {
                 Die();
@@ -86,21 +86,23 @@ namespace Entities
 
         private void GainHealth(int health)
         {
+            int previousHealth = _currentHealth;
             _currentHealth = Math.Min(_currentHealth + health, MaxHealth);
-            new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
+            new CharacterHealthChangedEvent(_instanceId, previousHealth, _currentHealth, MaxHealth, MaxHealth).Fire();
         }
 
         private void GainMaxHealth(int health)
         {
+            int previousMaxHealth = MaxHealth;
             MaxHealth += health;
-            new CharacterHealthChangedEvent(_currentHealth, MaxHealth).Fire();
+            new CharacterHealthChangedEvent(_instanceId, _currentHealth, _currentHealth, previousMaxHealth, MaxHealth).Fire();
             GainHealth(health);
         }
 
         private void Die()
         {
             new EntityDiedEvent(_instanceId).Fire();
-            new CharacterDiedEvent().Fire();
+            new CharacterDiedEvent(_instanceId).Fire();
         }
 
         private void SwitchWeapon(GameObject newWeapon)
@@ -111,7 +113,8 @@ namespace Entities
 
         private void OnCharacterAttackEvent(CharacterAttackEvent characterAttackedEvent)
         {
-            new EnableAttackTargetsEvent(_weapon.Damage).Fire();
+            new CharacterStartedAttackEvent(_instanceId).Fire();
+            new EnableAttackTargetsEvent(_instanceId, _weapon.Damage).Fire();
         }
 
         private void OnCharacterTakeDamageEvent(CharacterTakeDamageEvent characterTakeDamageEvent)
@@ -138,20 +141,21 @@ namespace Entities
         {
             Debug.Log("Character turn started!");
             _currentActionPoints = ActionPoints;
-            new CharacterActionPointsChangedEvent(_currentActionPoints, ActionPoints).Fire();
-            new CharacterTurnStartedEvent().Fire();
+            new CharacterActionPointsChangedEvent(_instanceId, _currentActionPoints, ActionPoints).Fire();
+            new CharacterTurnStartedEvent(_instanceId).Fire();
         }
 
         private void OnTurnEndedEvent(TurnEndedEvent _)
         {
             Debug.Log("Character turn ended!");
-            new CharacterTurnEndedEvent().Fire();
+            new CharacterTurnEndedEvent(_instanceId).Fire();
         }
 
         private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent _)
         {
+            new CharacterFinishedAttackEvent(_instanceId).Fire();
             _currentActionPoints -= 1;
-            new CharacterActionPointsChangedEvent(_currentActionPoints, ActionPoints).Fire();
+            new CharacterActionPointsChangedEvent(_instanceId, _currentActionPoints, ActionPoints).Fire();
         }
     }
 }

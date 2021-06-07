@@ -1,5 +1,5 @@
-using Entities;
 using Entities.Events;
+using GameState.Events;
 using UnityEngine;
 
 public class PlayerCombatControls : UIComponentWithQueueableActions
@@ -9,28 +9,33 @@ public class PlayerCombatControls : UIComponentWithQueueableActions
     private void OnEnable()
     {
         PlayerCombatControlsPanel.SetActive(false);
-        CharacterTurnStartedEvent.RegisterListener(OnPlayerTurnStartedEvent);
-        CharacterTurnEndedEvent.RegisterListener(OnPlayerTurnEndedEvent);
-        CharacterAttackEvent.RegisterListener(OnCharacterAttackEvent);
-        CharacterSelectedAttackTargetEvent.RegisterListener(OnCharacterSelectedAttackTargetEvent);
+        CharacterSpawnedEvent.RegisterListener(OnCharacterSpawnedEvent);
     }
 
-    private void OnPlayerTurnStartedEvent(CharacterTurnStartedEvent _)
+    private void OnCharacterSpawnedEvent(CharacterSpawnedEvent characterSpawnedEvent)
+    {
+        CharacterTurnStartedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnStartedEvent);
+        CharacterTurnEndedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnEndedEvent);
+        CharacterStartedAttackEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterStartedAttackEvent);
+        CharacterFinishedAttackEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterFinishedAttackEvent);
+    }
+
+    private void OnCharacterTurnStartedEvent(CharacterTurnStartedEvent _)
     {
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
     }
 
-    private void OnPlayerTurnEndedEvent(CharacterTurnEndedEvent _)
+    private void OnCharacterTurnEndedEvent(CharacterTurnEndedEvent _)
     {
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
     }
 
-    private void OnCharacterAttackEvent(CharacterAttackEvent _)
+    private void OnCharacterStartedAttackEvent(CharacterStartedAttackEvent _)
     {
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
     }
 
-    private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent _)
+    private void OnCharacterFinishedAttackEvent(CharacterFinishedAttackEvent _)
     {
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
     }

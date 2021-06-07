@@ -1,41 +1,67 @@
 using Entities.Events;
 using GameState.Events;
-using System;
 using UnityEngine;
 
 public class CombatEventLogConverter : MonoBehaviour
 {
     private void OnEnable()
     {
-        CharacterSelectedAttackTargetEvent.RegisterListener(OnCharacterSelectedAttackTargetEvent);
-        CharacterHealthChangedEvent.RegisterListener(OnCharacterHealthChangedEvent);
+        CharacterSpawnedEvent.RegisterListener(OnCharacterSpawnedEvent);
         EndTurnEvent.RegisterListener(OnEndTurnEvent);
-        CharacterActionPointsChangedEvent.RegisterListener(OnCharacterActionPointsChangedEvent);
-        CharacterTakeDamageEvent.RegisterListener(OnCharacterTakeDamageEvent);
-        CharacterTurnStartedEvent.RegisterListener(OnCharacterTurnStartedEvent);
-        CharacterTurnEndedEvent.RegisterListener(OnCharacterTurnEndedEvent);
     }
 
     private void OnDisable()
     {
-        CharacterSelectedAttackTargetEvent.DeregisterListener(OnCharacterSelectedAttackTargetEvent);
-        CharacterHealthChangedEvent.DeregisterListener(OnCharacterHealthChangedEvent);
         EndTurnEvent.DeregisterListener(OnEndTurnEvent);
-        CharacterActionPointsChangedEvent.DeregisterListener(OnCharacterActionPointsChangedEvent);
-        CharacterTakeDamageEvent.DeregisterListener(OnCharacterTakeDamageEvent);
-        CharacterTurnStartedEvent.DeregisterListener(OnCharacterTurnStartedEvent);
-        CharacterTurnEndedEvent.DeregisterListener(OnCharacterTurnEndedEvent);
     }
 
-    private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent characterSelectedAttackTargetEvent)
+    private void OnCharacterSpawnedEvent(CharacterSpawnedEvent characterSpawnedEvent)
+    {
+        CharacterDiedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterDiedEvent);
+        CharacterHealthChangedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterHealthChangedEvent);
+        CharacterActionPointsChangedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterActionPointsChangedEvent);
+        CharacterTurnStartedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnStartedEvent);
+        CharacterTurnEndedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnEndedEvent);
+        CharacterFinishedAttackEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterFinishedAttackEvent);
+    }
+
+    private void OnCharacterDiedEvent(CharacterDiedEvent characterDiedEvent)
+    {
+        CharacterDiedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterDiedEvent);
+        CharacterHealthChangedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterHealthChangedEvent);
+        CharacterActionPointsChangedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterActionPointsChangedEvent);
+        CharacterTurnStartedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterTurnStartedEvent);
+        CharacterTurnEndedEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterTurnEndedEvent);
+        CharacterFinishedAttackEvent.DeregisterListener(characterDiedEvent.SourceInstanceId, OnCharacterFinishedAttackEvent);
+    }
+
+    private void OnCharacterFinishedAttackEvent(CharacterFinishedAttackEvent characterFinishedAttackEvent)
     {
         new CombatEvent("Character attacked an enemy.").Fire();
     }
 
     private void OnCharacterHealthChangedEvent(CharacterHealthChangedEvent characterHealthChangedEvent)
     {
-        // TODO: Change this when the event changes to have previous and new values.
-        new CombatEvent($"Character health changed to {characterHealthChangedEvent.CurrentHealth} health.").Fire();
+        if (characterHealthChangedEvent.PreviousHealth < characterHealthChangedEvent.CurrentHealth)
+        {
+            int change = characterHealthChangedEvent.CurrentHealth - characterHealthChangedEvent.PreviousHealth;
+            new CombatEvent($"Character gained {change} health.");
+        }
+        else if (characterHealthChangedEvent.PreviousHealth > characterHealthChangedEvent.CurrentHealth)
+        {
+            int change = characterHealthChangedEvent.PreviousHealth - characterHealthChangedEvent.CurrentHealth;
+            new CombatEvent($"Character lost {change} health.");
+        }
+        else if (characterHealthChangedEvent.PreviousMaxHealth < characterHealthChangedEvent.MaxHealth)
+        {
+            int change = characterHealthChangedEvent.MaxHealth - characterHealthChangedEvent.PreviousMaxHealth;
+            new CombatEvent($"Character gained {change} max health.");
+        }
+        else if (characterHealthChangedEvent.PreviousMaxHealth < characterHealthChangedEvent.MaxHealth)
+        {
+            int change = characterHealthChangedEvent.PreviousMaxHealth - characterHealthChangedEvent.MaxHealth;
+            new CombatEvent($"Character lost {change} max health.");
+        }
     }
 
     private void OnEndTurnEvent(EndTurnEvent _)
@@ -47,11 +73,6 @@ public class CombatEventLogConverter : MonoBehaviour
     {
         // TODO: Change this when the event changes to have previous and new values.
         new CombatEvent($"Character action points changed to {characterActionPointsChangedEvent.CurrentActionPoints}.").Fire();
-    }
-
-    private void OnCharacterTakeDamageEvent(CharacterTakeDamageEvent characterTakeDamageEvent)
-    {
-        new CombatEvent($"Character is taking {characterTakeDamageEvent.Damage} damage.").Fire();
     }
 
     private void OnCharacterTurnStartedEvent(CharacterTurnStartedEvent _)

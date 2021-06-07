@@ -42,15 +42,35 @@ namespace GameState.Events
         public int EnemyInstanceId;
     }
 
-    public class SpawnPlayerEvent: GlobalEvent<SpawnPlayerEvent> { }
+    public class SpawnCharactersEvent: GlobalEvent<SpawnCharactersEvent>
+    {
+        public SpawnCharactersEvent(int numberToSpawn)
+        {
+            NumberToSpawn = numberToSpawn;
+        }
+
+        public int NumberToSpawn;
+    }
+
+    public class CharacterSpawnedEvent : GlobalEvent<CharacterSpawnedEvent>
+    {
+        public CharacterSpawnedEvent(int characterInstanceId)
+        {
+            CharacterInstanceId = characterInstanceId;
+        }
+
+        public int CharacterInstanceId;
+    }
 
     public class EnableAttackTargetsEvent : GlobalEvent<EnableAttackTargetsEvent> 
     {
-        public EnableAttackTargetsEvent(int damage)
+        public EnableAttackTargetsEvent(int characterInstanceId, int damage)
         {
+            CharacterInstanceId = characterInstanceId;
             Damage = damage;
         }
 
+        public int CharacterInstanceId;
         public int Damage;
     }
 

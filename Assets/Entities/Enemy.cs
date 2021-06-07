@@ -21,9 +21,7 @@ namespace Entities
 
         private void OnMouseDown()
         {
-            new DisableAttackTargetsEvent().Fire();
             _attackedFunc();
-            new CharacterSelectedAttackTargetEvent().Fire();
         }
 
         private void Awake()
@@ -111,7 +109,8 @@ namespace Entities
 
         private void Attack()
         {
-            new CharacterTakeDamageEvent(_weapon.Damage).Fire();
+            // TODO: This is wrong!!!  This will deal damage to nobody!  Need to change to pick a target from existing characters
+            new CharacterTakeDamageEvent(_instanceId, _weapon.Damage).Fire();
         }
 
         private void OnEnemyTakeDamageEvent(EnemyTakeDamageEvent enemyTakeDamageEvent)
@@ -139,7 +138,12 @@ namespace Entities
         private void OnEnableAttackTargetsEvent(EnableAttackTargetsEvent enableAttackTargetsEvent)
         {
             _attackTarget.enabled = true;
-            _attackedFunc = () => TakeDamage(enableAttackTargetsEvent.Damage);
+            _attackedFunc = () =>
+            {
+                new DisableAttackTargetsEvent().Fire();
+                TakeDamage(enableAttackTargetsEvent.Damage);
+                new CharacterSelectedAttackTargetEvent(enableAttackTargetsEvent.CharacterInstanceId).Fire();
+            };
         }
         
         private void OnDisableAttackTargetsEvent(DisableAttackTargetsEvent disableAttackTargetsEvent)

@@ -12,9 +12,9 @@ namespace Entities.Events
         public int CharacterInstanceId;
     }
 
-    public class CharacterGainXPEvent : GlobalEvent<CharacterGainXPEvent>
+    public class CharacterGainXPEvent : TargetEvent<CharacterGainXPEvent>
     {
-        public CharacterGainXPEvent(int xp)
+        public CharacterGainXPEvent(int targetInstanceId, int xp) : base(targetInstanceId)
         {
             XP = xp;
         }
@@ -22,9 +22,9 @@ namespace Entities.Events
         public int XP;
     }
 
-    public class CharacterXPChangedEvent : GlobalEvent<CharacterXPChangedEvent>
+    public class CharacterXPChangedEvent : SourceEvent<CharacterXPChangedEvent>
     {
-        public CharacterXPChangedEvent(int xp)
+        public CharacterXPChangedEvent(int sourceInstanceId, int xp) : base(sourceInstanceId)
         {
             XP = xp;
         }
@@ -32,9 +32,9 @@ namespace Entities.Events
         public int XP;
     }
 
-    public class CharacterLevelChangedEvent : GlobalEvent<CharacterLevelChangedEvent>
+    public class CharacterLevelChangedEvent : SourceEvent<CharacterLevelChangedEvent>
     {
-        public CharacterLevelChangedEvent(int level)
+        public CharacterLevelChangedEvent(int sourceInstanceId, int level) : base(sourceInstanceId)
         {
             Level = level;
         }
@@ -42,26 +42,30 @@ namespace Entities.Events
         public int Level;
     }
 
-    public class CharacterDiedEvent : GlobalEvent<CharacterDiedEvent>
+    public class CharacterDiedEvent : SourceEvent<CharacterDiedEvent>
     {
-        public CharacterDiedEvent() { }
+        public CharacterDiedEvent(int sourceInstanceId) : base(sourceInstanceId) { }
     }
 
-    public class CharacterHealthChangedEvent : GlobalEvent<CharacterHealthChangedEvent>
+    public class CharacterHealthChangedEvent : SourceEvent<CharacterHealthChangedEvent>
     {
-        public CharacterHealthChangedEvent(int currentHealth, int maxHealth)
+        public CharacterHealthChangedEvent(int sourceInstanceId, int previousHealth, int currentHealth, int previousMaxHealth, int maxHealth) : base(sourceInstanceId)
         {
+            PreviousHealth = previousHealth;
             CurrentHealth = currentHealth;
+            PreviousMaxHealth = previousMaxHealth;
             MaxHealth = maxHealth;
         }
 
+        public int PreviousHealth;
         public int CurrentHealth;
+        public int PreviousMaxHealth;
         public int MaxHealth;
     }
 
-    public class CharacterActionPointsChangedEvent : GlobalEvent<CharacterActionPointsChangedEvent>
+    public class CharacterActionPointsChangedEvent : SourceEvent<CharacterActionPointsChangedEvent>
     {
-        public CharacterActionPointsChangedEvent(int currentActionPoints, int maxActionPoints)
+        public CharacterActionPointsChangedEvent(int sourceInstanceId, int currentActionPoints, int maxActionPoints) : base(sourceInstanceId)
         {
             CurrentActionPoints = currentActionPoints;
             MaxActionPoints = maxActionPoints;
@@ -71,9 +75,9 @@ namespace Entities.Events
         public int MaxActionPoints;
     }
 
-    public class CharacterTakeDamageEvent : GlobalEvent<CharacterTakeDamageEvent>
+    public class CharacterTakeDamageEvent : TargetEvent<CharacterTakeDamageEvent>
     {
-        public CharacterTakeDamageEvent(int damage)
+        public CharacterTakeDamageEvent(int targetInstanceId, int damage) : base(targetInstanceId)
         {
             Damage = damage;
         }
@@ -81,9 +85,9 @@ namespace Entities.Events
         public int Damage;
     }
 
-    public class CharacterGainHealthEvent : GlobalEvent<CharacterGainHealthEvent>
+    public class CharacterGainHealthEvent : TargetEvent<CharacterGainHealthEvent>
     {
-        public CharacterGainHealthEvent(int health)
+        public CharacterGainHealthEvent(int targetInstanceId, int health) : base(targetInstanceId)
         {
             Health = health;
         }
@@ -91,9 +95,9 @@ namespace Entities.Events
         public int Health;
     }
 
-    public class CharacterGainMaxHealthEvent : GlobalEvent<CharacterGainMaxHealthEvent>
+    public class CharacterGainMaxHealthEvent : TargetEvent<CharacterGainMaxHealthEvent>
     {
-        public CharacterGainMaxHealthEvent(int maxHealth)
+        public CharacterGainMaxHealthEvent(int targetInstanceId, int maxHealth) : base(targetInstanceId)
         {
             MaxHealth = maxHealth;
         }
@@ -101,11 +105,33 @@ namespace Entities.Events
         public int MaxHealth;
     }
 
-    public class CharacterTurnStartedEvent : GlobalEvent<CharacterTurnStartedEvent> { }
+    public class CharacterTurnStartedEvent : SourceEvent<CharacterTurnStartedEvent> 
+    {
+        public CharacterTurnStartedEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
 
-    public class CharacterTurnEndedEvent : GlobalEvent<CharacterTurnEndedEvent> { }
+    public class CharacterTurnEndedEvent : SourceEvent<CharacterTurnEndedEvent>
+    {
+        public CharacterTurnEndedEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
 
-    public class CharacterAttackEvent : GlobalEvent<CharacterAttackEvent> { }
+    public class CharacterAttackEvent : TargetEvent<CharacterAttackEvent> 
+    {
+        public CharacterAttackEvent(int targetInstanceId) : base(targetInstanceId) { }
+    }
 
-    public class CharacterSelectedAttackTargetEvent : GlobalEvent<CharacterSelectedAttackTargetEvent> { }
+    public class CharacterSelectedAttackTargetEvent : TargetEvent<CharacterSelectedAttackTargetEvent> 
+    {
+        public CharacterSelectedAttackTargetEvent(int targetInstanceId) : base(targetInstanceId) { }
+    }
+
+    public class CharacterStartedAttackEvent : SourceEvent<CharacterStartedAttackEvent>
+    {
+        public CharacterStartedAttackEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
+
+    public class CharacterFinishedAttackEvent : SourceEvent<CharacterFinishedAttackEvent>
+    {
+        public CharacterFinishedAttackEvent(int sourceInstanceId) : base(sourceInstanceId) { }
+    }
 }

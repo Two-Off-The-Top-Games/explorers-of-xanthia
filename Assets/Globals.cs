@@ -5,8 +5,8 @@ public class Globals : MonoBehaviour
 {
     public static Globals Instance;
 
-    [HideInInspector]
-    public int CharacterInstanceId;
+    //[HideInInspector]
+    //public int CharacterInstanceId;
 
     private void OnEnable()
     {
@@ -16,6 +16,6 @@ public class Globals : MonoBehaviour
 
     private void OnRegisterCharacterInstanceIdEvent(RegisterCharacterInstanceIdEvent registerCharacterInstanceIdEvent)
     {
-        CharacterInstanceId = registerCharacterInstanceIdEvent.CharacterInstanceId;
+        //CharacterInstanceId = registerCharacterInstanceIdEvent.CharacterInstanceId;
     }
 }
