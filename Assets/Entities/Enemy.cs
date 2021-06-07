@@ -111,7 +111,7 @@ namespace Entities
 
         private void Attack()
         {
-            new CharacterTakeDamageEvent(_weapon.Damage).Fire();
+            new CharacterTakeDamageEvent(_instanceId, _weapon.Damage).Fire();
         }
 
         private void OnEnemyTakeDamageEvent(EnemyTakeDamageEvent enemyTakeDamageEvent)
