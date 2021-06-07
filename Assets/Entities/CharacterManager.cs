@@ -1,7 +1,7 @@
 using GameState.Events;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class CharacterManager : MonoBehaviour
 {
     public GameObject CharacterPrefab;
     [Range(0.01f, 100f)]
