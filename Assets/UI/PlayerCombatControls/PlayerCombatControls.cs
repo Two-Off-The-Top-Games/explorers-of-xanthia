@@ -17,16 +17,16 @@ public class PlayerCombatControls : UIComponentWithQueueableActions
 
     private void OnCharacterSpawnedEvent(CharacterSpawnedEvent characterSpawnedEvent)
     {
-        CharacterTurnStartedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnPlayerTurnStartedEvent);
-        CharacterTurnEndedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnPlayerTurnEndedEvent);
+        CharacterTurnStartedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnStartedEvent);
+        CharacterTurnEndedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterTurnEndedEvent);
     }
 
-    private void OnPlayerTurnStartedEvent(CharacterTurnStartedEvent _)
+    private void OnCharacterTurnStartedEvent(CharacterTurnStartedEvent _)
     {
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
     }
 
-    private void OnPlayerTurnEndedEvent(CharacterTurnEndedEvent _)
+    private void OnCharacterTurnEndedEvent(CharacterTurnEndedEvent _)
     {
         EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
     }

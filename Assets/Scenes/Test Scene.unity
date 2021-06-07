@@ -724,7 +724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269f6c074232b0f4db222912860ee74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerPrefab: {fileID: 6216873017422867032, guid: 08f85aa4e97a6494caf50392937dccec, type: 3}
+  CharacterPrefab: {fileID: 6216873017422867032, guid: 08f85aa4e97a6494caf50392937dccec, type: 3}
   PercentOfAvailableVerticalScreenSpace: 66.7
 --- !u!1001 &490619165
 PrefabInstance:
@@ -1092,7 +1092,6 @@ GameObject:
   - component: {fileID: 863045886}
   - component: {fileID: 863045885}
   - component: {fileID: 863045889}
-  - component: {fileID: 863045890}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -1194,20 +1193,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerCombatControlsPanel: {fileID: 2079123527}
---- !u!114 &863045890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 863045884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad7454d6aa1561e45ba1a2033775552f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DevPanelGameObject: {fileID: 0}
-  ShowDevPanel: 0
 --- !u!1 &932240353
 GameObject:
   m_ObjectHideFlags: 0
