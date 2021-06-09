@@ -12,6 +12,7 @@ namespace Entities
         public int MaxHealth;
         public int ActionPoints;
 
+        private Inventory _inventory;
         private GameObject _CurrentWeapon;
         private Weapon _weapon;
         private int _currentHealth;
@@ -27,6 +28,8 @@ namespace Entities
             _level = 1;
             _currentHealth = MaxHealth;
             _currentActionPoints = ActionPoints;
+
+            _inventory = new Inventory();
 
             SwitchWeapon(StartingWeapon);
 
