@@ -3,7 +3,10 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
-    public List<IItemAction> Actions;
+    public GameObject ItemActionButton;
+    public GameObject ItemActionPanel;
+    protected int OwnerId;
+    protected abstract List<ItemAction> Actions { get; }
     private void OnMouseDown()
     {
         // TODO: Open item actions menu.
