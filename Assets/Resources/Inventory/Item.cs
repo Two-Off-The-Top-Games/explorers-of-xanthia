@@ -12,10 +12,6 @@ public abstract class Item : MonoBehaviour
     protected abstract List<ItemAction> Actions { get; }
 
     private GameObject _spawnedItemActionPanel;
-    private float _previousRectWidth;
-    private float _previousRectHeight;
-    private RectTransform _rectTransform;
-    private BoxCollider2D _collider;
     private Button _button;
 
     private void Start()

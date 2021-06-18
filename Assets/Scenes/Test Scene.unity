@@ -133,8 +133,8 @@ GameObject:
   m_Component:
   - component: {fileID: 58677685}
   - component: {fileID: 58677686}
-  - component: {fileID: 58677688}
   - component: {fileID: 58677687}
+  - component: {fileID: 58677688}
   m_Layer: 5
   m_Name: InventoryContents
   m_TagString: Untagged
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 58677684}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -206,12 +206,14 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 45, y: 45}
-  m_Spacing: {x: 5, y: 5}
-  m_Constraint: 1
-  m_ConstraintCount: 5
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &97664730
 GameObject:
   m_ObjectHideFlags: 0
