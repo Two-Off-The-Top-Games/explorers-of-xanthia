@@ -7,8 +7,10 @@ public abstract class Item : MonoBehaviour
 {
     public GameObject ItemActionButton;
     public GameObject ItemActionPanel;
+    public TextMeshProUGUI ItemText;
 
     protected int OwnerId;
+    public string Name;
     protected abstract List<ItemAction> Actions { get; }
 
     private GameObject _spawnedItemActionPanel;
@@ -19,6 +21,7 @@ public abstract class Item : MonoBehaviour
         Debug.Log("I am starting!");
         _button = GetComponent<Button>();
         _button.onClick.AddListener(OnButtonClicked);
+        ItemText.text = Name;
     }
 
     private void OnButtonClicked()
