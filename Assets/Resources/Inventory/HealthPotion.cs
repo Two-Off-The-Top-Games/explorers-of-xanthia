@@ -8,7 +8,6 @@ public class HealthPotion : Item
 
     private void HealthPotionUseEffect()
     {
-        // TODO: Get instance id somehow.
         new CharacterGainHealthEvent(OwnerId, HealAmount);
     }
 }
