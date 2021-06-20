@@ -37,6 +37,7 @@ public abstract class Item : MonoBehaviour
         {
             var spawnedItemActionButton = Instantiate(ItemActionButton, _spawnedItemActionPanel.transform, false);
             spawnedItemActionButton.GetComponentInChildren<TextMeshProUGUI>().text = action.Name;
+            spawnedItemActionButton.GetComponent<Button>().onClick.AddListener(() => action.Action());
         }
     }
 
