@@ -175,6 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d140a8a67051b64aac277337f019456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TEMPHealthPotion: {fileID: 0}
 --- !u!114 &58677687
 MonoBehaviour:
   m_ObjectHideFlags: 0
