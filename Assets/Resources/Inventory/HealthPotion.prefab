@@ -227,6 +227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemActionButton: {fileID: 4284604868375268433, guid: a33db7c84d51dc447ae37d5594e6b613, type: 3}
   ItemActionPanel: {fileID: 4939413750688990190, guid: 39b107dfcd83a494a92be2ee2b19bf82, type: 3}
+  OutsideClickDetector: {fileID: 8160976758554328858, guid: 7579695227821954fb45b7d4c7e81bea, type: 3}
   ItemText: {fileID: 15593594977935686}
   Name: Health Potion
   HealAmount: 5
