@@ -1,24 +1,15 @@
-using System.Collections.Generic;
+using Events.Inventory;
 using UnityEngine;
 
-public class Inventory
+public class Inventory : MonoBehaviour
 {
-    private Dictionary<int, GameObject> _items = new Dictionary<int, GameObject>();
-
-    public void AddItem(GameObject item)
+    private void Awake()
     {
-        // Instantiate
-        // Add instantiated item
-        // Register listener(s)
-        // Fire events
+        AddItemToInventoryEvent.RegisterListener(AddItemToInventory);
     }
 
-    // TODO: Add event.
-    private void OnRemoveItemFromInventoryEvent()
+    private void AddItemToInventory(AddItemToInventoryEvent addItemToInventoryEvent)
     {
-        // Remove item from inventory
-        // Deregister listener(s)
-        // Destroy item
-        // Fire events
+        Instantiate(addItemToInventoryEvent.ItemToAdd, transform);
     }
 }

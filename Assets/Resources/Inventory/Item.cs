@@ -28,11 +28,5 @@ public abstract class Item : MonoBehaviour
     private void UseItemAction()
     {
         UseAction();
-        CleanUp();
-    }
-
-    private void CleanUp()
-    {
-        Destroy(gameObject);
     }
 }
