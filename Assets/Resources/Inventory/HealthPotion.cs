@@ -1,10 +1,10 @@
 using Entities.Events;
-using System.Collections.Generic;
+using System;
 
 public class HealthPotion : Item
 {
     public int HealAmount;
-    protected override List<ItemAction> Actions => new List<ItemAction>() { new ItemAction("Use", HealthPotionUseEffect) };
+    protected override Action UseAction => HealthPotionUseEffect;
 
     private void HealthPotionUseEffect()
     {
