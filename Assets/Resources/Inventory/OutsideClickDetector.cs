@@ -21,24 +21,27 @@ public class OutsideClickDetector : MonoBehaviour, IPointerDownHandler
 
     private void OnRegisterOutsideClickEvent(RegisterOutsideClickEvent registerOutsideClickEvent)
     {
+        Debug.Log("Registered onOutsideClickAction.");
         _onOutsideClickAction = registerOutsideClickEvent.OnOutsideClickAction;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _onOutsideClickAction();
-
+        Clickable clickable = null;
         var raycaster = transform.parent.GetComponent<GraphicRaycaster>();
         List<RaycastResult> results = new List<RaycastResult>();
         raycaster.Raycast(eventData, results);
         foreach (RaycastResult result in results)
         {
-            Debug.Log("Hit " + result.gameObject.name);
-            //if (result.gameObject.GetComponent<Selectable>())
-            //{
-            //    ExecuteEvents.Execute(result.gameObject, eventData, ExecuteEvents.pointerClickHandler);
-            //}
+            clickable = result.gameObject.GetComponent<Clickable>();
+            if (clickable != null)
+            {
+                break;
+            }
         }
+
+        _onOutsideClickAction();
+        clickable?.InvokeClick();
         Destroy(gameObject);
     }
 }
