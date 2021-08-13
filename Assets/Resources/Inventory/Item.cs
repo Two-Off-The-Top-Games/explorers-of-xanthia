@@ -1,4 +1,4 @@
-using System;
+using Events.Entity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,9 +7,7 @@ public abstract class Item : MonoBehaviour
 {
     public TextMeshProUGUI ItemText;
 
-    protected int OwnerId;
     public string Name;
-    protected abstract Action UseAction { get; }
 
     private Button _button;
 
@@ -22,11 +20,16 @@ public abstract class Item : MonoBehaviour
 
     private void OnButtonClicked()
     {
-        UseItemAction();
+        ClickTargetSelectedEvent.RegisterListener(OnClickTargetSelectedEvent);
+        new EnableClickTargetEvent().Fire();
     }
 
-    private void UseItemAction()
+    private void OnClickTargetSelectedEvent(ClickTargetSelectedEvent clickTargetSelectedEvent)
     {
-        UseAction();
+        new DisableClickTargetEvent().Fire();
+        ClickTargetSelectedEvent.DeregisterListener(OnClickTargetSelectedEvent);
+        ItemEffect(clickTargetSelectedEvent.SelectedInstanceId);
     }
+
+    protected abstract void ItemEffect(int targetInstanceId);
 }

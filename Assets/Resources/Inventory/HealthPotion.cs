@@ -1,14 +1,13 @@
-using Entities.Events;
+using Events.Entity;
 using System;
 
 public class HealthPotion : Item
 {
     public int HealAmount;
-    protected override Action UseAction => HealthPotionUseEffect;
 
-    private void HealthPotionUseEffect()
+    protected override void ItemEffect(int targetInstanceId)
     {
-        new CharacterGainHealthEvent(OwnerId, HealAmount);
+        new EntityGainHealthEvent(targetInstanceId, HealAmount);
         Destroy(gameObject);
     }
 }
