@@ -11,4 +11,8 @@ namespace Events.Inventory
 
         public GameObject ItemToAdd;
     }
+
+    public class UseItemStartedEvent : GlobalEvent<UseItemStartedEvent> { }
+
+    public class UseItemEndedEvent : GlobalEvent<UseItemEndedEvent> { }
 }
