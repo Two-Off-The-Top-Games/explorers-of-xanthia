@@ -12,7 +12,20 @@ namespace Events.Inventory
         public GameObject ItemToAdd;
     }
 
-    public class UseItemStartedEvent : GlobalEvent<UseItemStartedEvent> { }
+    public class UseItemStartedEvent : GlobalEvent<UseItemStartedEvent>
+    {
+        public UseItemStartedEvent(int sourceItemInstanceId)
+        {
+            SourceItemInstanceId = sourceItemInstanceId;
+        }
+
+        public int SourceItemInstanceId;
+    }
 
     public class UseItemEndedEvent : GlobalEvent<UseItemEndedEvent> { }
+
+    public class CancelUseItemEvent : TargetEvent<CancelUseItemEvent>
+    {
+        public CancelUseItemEvent(int targetInstanceId) : base(targetInstanceId) { }
+    }
 }

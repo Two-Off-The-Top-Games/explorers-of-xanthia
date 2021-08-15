@@ -9,11 +9,14 @@ public abstract class Item : MonoBehaviour
     public TextMeshProUGUI ItemText;
     public string Name;
 
+    private int _instanceId;
     private Button _button;
     private bool _itemEnabled;
 
     private void Start()
     {
+        _instanceId = GetInstanceID();
+        CancelUseItemEvent.RegisterListener(_instanceId, OnEndUseItemEvent);
         UseItemStartedEvent.RegisterListener(OnUseItemStartedEvent);
         UseItemEndedEvent.RegisterListener(OnUseItemEndedEvent);
         _itemEnabled = true;
@@ -32,7 +35,7 @@ public abstract class Item : MonoBehaviour
     {
         if (_itemEnabled)
         {
-            new UseItemStartedEvent().Fire();
+            new UseItemStartedEvent(_instanceId).Fire();
             ClickTargetSelectedEvent.RegisterListener(OnClickTargetSelectedEvent);
             new EnableClickTargetEvent().Fire();
         }
@@ -40,9 +43,19 @@ public abstract class Item : MonoBehaviour
 
     private void OnClickTargetSelectedEvent(ClickTargetSelectedEvent clickTargetSelectedEvent)
     {
+        EndUseItem();
+        ItemEffect(clickTargetSelectedEvent.SelectedInstanceId);
+    }
+
+    private void OnEndUseItemEvent(CancelUseItemEvent endUseItemEvent)
+    {
+        EndUseItem();
+    }
+
+    private void EndUseItem()
+    {
         new DisableClickTargetEvent().Fire();
         ClickTargetSelectedEvent.DeregisterListener(OnClickTargetSelectedEvent);
-        ItemEffect(clickTargetSelectedEvent.SelectedInstanceId);
         new UseItemEndedEvent().Fire();
     }
 
