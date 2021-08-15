@@ -2365,6 +2365,7 @@ GameObject:
   - component: {fileID: 1883109462}
   - component: {fileID: 1883109461}
   - component: {fileID: 1883109460}
+  - component: {fileID: 1883109463}
   m_Layer: 5
   m_Name: CancelItemButton
   m_TagString: Untagged
@@ -2474,6 +2475,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1883109458}
   m_CullTransparentMesh: 1
+--- !u!114 &1883109463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883109458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aef0a238fafdf34a8165a17bd1646dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1887778550
 GameObject:
   m_ObjectHideFlags: 0
@@ -3150,6 +3163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2079123528}
   - component: {fileID: 2079123529}
+  - component: {fileID: 2079123530}
   m_Layer: 5
   m_Name: PlayerCombatControls
   m_TagString: Untagged
@@ -3194,3 +3208,15 @@ MonoBehaviour:
   AttackButton: {fileID: 228725102}
   EndTurnButton: {fileID: 582022729}
   CancelItemButton: {fileID: 1883109458}
+--- !u!114 &2079123530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079123527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179fe919af654544e850e154ad2d97a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
