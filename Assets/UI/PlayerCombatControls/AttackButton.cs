@@ -38,7 +38,7 @@ public class AttackButton : UIComponentWithQueueableActions
     private void OnCharacterTurnStartedEvent(CharacterTurnStartedEvent characterTurnStartedEvent)
     {
         CharacterActionPointsChangedEvent.RegisterListener(characterTurnStartedEvent.SourceInstanceId, OnCharacterActionPointsChangedEvent);
-        _characterAttack = () => new CharacterAttackEvent(characterTurnStartedEvent.SourceInstanceId).Fire(); ;
+        _characterAttack = () => new CharacterAttackEvent(characterTurnStartedEvent.SourceInstanceId).Fire();
     }
 
     private void OnCharacterTurnEndedEvent(CharacterTurnEndedEvent characterTurnEndedEvent)

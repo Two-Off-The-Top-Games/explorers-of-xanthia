@@ -1,5 +1,5 @@
 using Entities.Events;
-using Events.Common;
+using Events.Entity;
 using GameState.Events;
 using System;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Entities
 {
-    public class Enemy : MonoBehaviour 
+    public class Enemy : MonoBehaviour
     {
         public GameObject StartingWeapon;
         public int MaxHealth;
@@ -16,18 +16,17 @@ namespace Entities
         private Weapon _weapon;
         private int _currentHealth;
         protected int _instanceId;
-        private BoxCollider2D _attackTarget;
-        private Action _attackedFunc;
+        private BoxCollider2D _clickTarget;
 
         private void OnMouseDown()
         {
-            _attackedFunc();
+            new ClickTargetSelectedEvent(_instanceId).Fire();
         }
 
         private void Awake()
         {
-            _attackTarget = GetComponent<BoxCollider2D>();
-            _attackTarget.enabled = false;
+            _clickTarget = GetComponent<BoxCollider2D>();
+            _clickTarget.enabled = false;
             _currentHealth = MaxHealth;
             _instanceId = gameObject.GetInstanceID();
 
@@ -49,8 +48,8 @@ namespace Entities
             EnemyGainHealthEvent.RegisterListener(_instanceId, OnEnemyGainHealthEvent);
             EnemyGainMaxHealthEvent.RegisterListener(_instanceId, OnEnemyGainMaxHealthEvent);
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
-            EnableAttackTargetsEvent.RegisterListener(OnEnableAttackTargetsEvent);
-            DisableAttackTargetsEvent.RegisterListener(OnDisableAttackTargetsEvent);
+            DisableClickTargetEvent.RegisterListener(OnDisableClickTargetEvent);
+            EnableClickTargetEvent.RegisterListener(OnEnableClickTargetEvent);
         }
 
         private void DeregisterEventListeners()
@@ -59,8 +58,8 @@ namespace Entities
             EnemyGainHealthEvent.DeregisterListener(_instanceId);
             EnemyGainMaxHealthEvent.DeregisterListener(_instanceId);
             StartCombatTurnEvent.DeregisterListener(_instanceId);
-            EnableAttackTargetsEvent.DeregisterListener(OnEnableAttackTargetsEvent);
-            DisableAttackTargetsEvent.DeregisterListener(OnDisableAttackTargetsEvent);
+            DisableClickTargetEvent.DeregisterListener(OnDisableClickTargetEvent);
+            EnableClickTargetEvent.DeregisterListener(OnEnableClickTargetEvent);
         }
 
         private async Task PerformTurn()
@@ -109,8 +108,8 @@ namespace Entities
 
         private void Attack()
         {
-            // TODO: This is wrong!!!  This will deal damage to nobody!  Need to change to pick a target from existing characters
-            new CharacterTakeDamageEvent(_instanceId, _weapon.Damage).Fire();
+            // TODO: This is wrong!!!  This will deal damage to the enemy!  Need to change to pick a target from existing characters
+            new EntityTakeDamageEvent(_instanceId, _weapon.Damage).Fire();
         }
 
         private void OnEnemyTakeDamageEvent(EnemyTakeDamageEvent enemyTakeDamageEvent)
@@ -135,20 +134,14 @@ namespace Entities
             Task.Run(PerformTurn);
         }
 
-        private void OnEnableAttackTargetsEvent(EnableAttackTargetsEvent enableAttackTargetsEvent)
+        private void OnEnableClickTargetEvent(EnableClickTargetEvent _)
         {
-            _attackTarget.enabled = true;
-            _attackedFunc = () =>
-            {
-                new DisableAttackTargetsEvent().Fire();
-                TakeDamage(enableAttackTargetsEvent.Damage);
-                new CharacterSelectedAttackTargetEvent(enableAttackTargetsEvent.CharacterInstanceId).Fire();
-            };
+            _clickTarget.enabled = true;
         }
-        
-        private void OnDisableAttackTargetsEvent(DisableAttackTargetsEvent disableAttackTargetsEvent)
+
+        private void OnDisableClickTargetEvent(DisableClickTargetEvent _)
         {
-            _attackTarget.enabled = false;
+            _clickTarget.enabled = false;
         }
     }
 }

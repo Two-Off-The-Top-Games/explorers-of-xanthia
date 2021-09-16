@@ -1,5 +1,5 @@
 using Entities.Events;
-using Events.Common;
+using Events.Entity;
 using GameState.Events;
 using System;
 using UnityEngine;
@@ -12,7 +12,6 @@ namespace Entities
         public int MaxHealth;
         public int ActionPoints;
 
-        private Inventory _inventory;
         private GameObject _CurrentWeapon;
         private Weapon _weapon;
         private int _currentHealth;
@@ -20,16 +19,17 @@ namespace Entities
         private int _level;
         private int _currentActionPoints;
         private int _instanceId;
+        private BoxCollider2D _clickTarget;
 
         private void Awake()
         {
             _instanceId = gameObject.GetInstanceID();
+            _clickTarget = GetComponent<BoxCollider2D>();
+            _clickTarget.enabled = false;
             _xp = 0;
             _level = 1;
             _currentHealth = MaxHealth;
             _currentActionPoints = ActionPoints;
-
-            _inventory = new Inventory();
 
             SwitchWeapon(StartingWeapon);
 
@@ -49,13 +49,19 @@ namespace Entities
         private void RegisterEventListeners()
         {
             CharacterGainXPEvent.RegisterListener(_instanceId, OnCharacterGainXPEvent);
-            CharacterTakeDamageEvent.RegisterListener(_instanceId, OnCharacterTakeDamageEvent);
-            CharacterGainHealthEvent.RegisterListener(_instanceId, OnCharacterGainHealthEvent);
-            CharacterGainMaxHealthEvent.RegisterListener(_instanceId, OnCharacterGainMaxHealthEvent);
+            EntityTakeDamageEvent.RegisterListener(_instanceId, OnEntityTakeDamageEvent);
+            EntityGainHealthEvent.RegisterListener(_instanceId, OnEntityGainHealthEvent);
+            EntityGainMaxHealthEvent.RegisterListener(_instanceId, OnEntityGainMaxHealthEvent);
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
             TurnEndedEvent.RegisterListener(_instanceId, OnTurnEndedEvent);
             CharacterAttackEvent.RegisterListener(_instanceId, OnCharacterAttackEvent);
-            CharacterSelectedAttackTargetEvent.RegisterListener(_instanceId, OnCharacterSelectedAttackTargetEvent);
+            EnableClickTargetEvent.RegisterListener(OnEnableClickTargetEvent);
+            DisableClickTargetEvent.RegisterListener(OnDisableClickTargetEvent);
+        }
+
+        private void OnMouseDown()
+        {
+            new ClickTargetSelectedEvent(_instanceId).Fire();
         }
 
         private void GainXP(int xp)
@@ -76,7 +82,7 @@ namespace Entities
             new CharacterLevelChangedEvent(_instanceId, _level).Fire();
         }
 
-        private void TakeDamage(int damage)
+        public void TakeDamage(int damage)
         {
             int previousHealth = _currentHealth;
             _currentHealth -= damage;
@@ -87,14 +93,14 @@ namespace Entities
             }
         }
 
-        private void GainHealth(int health)
+        public void GainHealth(int health)
         {
             int previousHealth = _currentHealth;
             _currentHealth = Math.Min(_currentHealth + health, MaxHealth);
             new CharacterHealthChangedEvent(_instanceId, previousHealth, _currentHealth, MaxHealth, MaxHealth).Fire();
         }
 
-        private void GainMaxHealth(int health)
+        public void GainMaxHealth(int health)
         {
             int previousMaxHealth = MaxHealth;
             MaxHealth += health;
@@ -116,23 +122,24 @@ namespace Entities
 
         private void OnCharacterAttackEvent(CharacterAttackEvent characterAttackedEvent)
         {
+            ClickTargetSelectedEvent.RegisterListener(OnClickTargetSelectedEvent);
+            new EnableClickTargetEvent().Fire();
             new CharacterStartedAttackEvent(_instanceId).Fire();
-            new EnableAttackTargetsEvent(_instanceId, _weapon.Damage).Fire();
         }
 
-        private void OnCharacterTakeDamageEvent(CharacterTakeDamageEvent characterTakeDamageEvent)
+        private void OnEntityTakeDamageEvent(EntityTakeDamageEvent entityTakeDamageEvent)
         {
-            TakeDamage(characterTakeDamageEvent.Damage);
+            TakeDamage(entityTakeDamageEvent.Damage);
         }
 
-        private void OnCharacterGainHealthEvent(CharacterGainHealthEvent characterGainHealthEvent)
+        private void OnEntityGainHealthEvent(EntityGainHealthEvent entityGainHealthEvent)
         {
-            GainHealth(characterGainHealthEvent.Health);
+            GainHealth(entityGainHealthEvent.Health);
         }
 
-        private void OnCharacterGainMaxHealthEvent(CharacterGainMaxHealthEvent characterGainMaxHealthEvent)
+        private void OnEntityGainMaxHealthEvent(EntityGainMaxHealthEvent entityGainMaxHealthEvent)
         {
-            GainMaxHealth(characterGainMaxHealthEvent.MaxHealth);
+            GainMaxHealth(entityGainMaxHealthEvent.MaxHealth);
         }
         
         private void OnCharacterGainXPEvent(CharacterGainXPEvent characterGainXPEvent)
@@ -154,11 +161,22 @@ namespace Entities
             new CharacterTurnEndedEvent(_instanceId).Fire();
         }
 
-        private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent _)
+        private void OnEnableClickTargetEvent(EnableClickTargetEvent _)
         {
+            _clickTarget.enabled = true;
+        }
+
+        private void OnDisableClickTargetEvent(DisableClickTargetEvent _)
+        {
+            _clickTarget.enabled = false;
+        }
+
+        private void OnClickTargetSelectedEvent(ClickTargetSelectedEvent clickTargetSelectedEvent)
+        {
+            new EntityTakeDamageEvent(clickTargetSelectedEvent.SelectedInstanceId, _weapon.Damage).Fire();
+            new DisableClickTargetEvent().Fire();
             new CharacterFinishedAttackEvent(_instanceId).Fire();
-            _currentActionPoints -= 1;
-            new CharacterActionPointsChangedEvent(_instanceId, _currentActionPoints, ActionPoints).Fire();
+            ClickTargetSelectedEvent.DeregisterListener(OnClickTargetSelectedEvent);
         }
     }
 }

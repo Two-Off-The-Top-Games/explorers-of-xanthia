@@ -75,36 +75,6 @@ namespace Entities.Events
         public int MaxActionPoints;
     }
 
-    public class CharacterTakeDamageEvent : TargetEvent<CharacterTakeDamageEvent>
-    {
-        public CharacterTakeDamageEvent(int targetInstanceId, int damage) : base(targetInstanceId)
-        {
-            Damage = damage;
-        }
-
-        public int Damage;
-    }
-
-    public class CharacterGainHealthEvent : TargetEvent<CharacterGainHealthEvent>
-    {
-        public CharacterGainHealthEvent(int targetInstanceId, int health) : base(targetInstanceId)
-        {
-            Health = health;
-        }
-
-        public int Health;
-    }
-
-    public class CharacterGainMaxHealthEvent : TargetEvent<CharacterGainMaxHealthEvent>
-    {
-        public CharacterGainMaxHealthEvent(int targetInstanceId, int maxHealth) : base(targetInstanceId)
-        {
-            MaxHealth = maxHealth;
-        }
-
-        public int MaxHealth;
-    }
-
     public class CharacterTurnStartedEvent : SourceEvent<CharacterTurnStartedEvent> 
     {
         public CharacterTurnStartedEvent(int sourceInstanceId) : base(sourceInstanceId) { }
@@ -118,11 +88,6 @@ namespace Entities.Events
     public class CharacterAttackEvent : TargetEvent<CharacterAttackEvent> 
     {
         public CharacterAttackEvent(int targetInstanceId) : base(targetInstanceId) { }
-    }
-
-    public class CharacterSelectedAttackTargetEvent : TargetEvent<CharacterSelectedAttackTargetEvent> 
-    {
-        public CharacterSelectedAttackTargetEvent(int targetInstanceId) : base(targetInstanceId) { }
     }
 
     public class CharacterStartedAttackEvent : SourceEvent<CharacterStartedAttackEvent>

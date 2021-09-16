@@ -1,15 +1,20 @@
 using Entities.Events;
+using Events.Inventory;
 using GameState.Events;
 using UnityEngine;
 
 public class PlayerCombatControls : UIComponentWithQueueableActions
 {
-    public GameObject PlayerCombatControlsPanel;
+    public GameObject AttackButton;
+    public GameObject EndTurnButton;
+    public GameObject CancelItemButton;
 
     private void OnEnable()
     {
-        PlayerCombatControlsPanel.SetActive(false);
+        SetActiveForAllControls(false);
         CharacterSpawnedEvent.RegisterListener(OnCharacterSpawnedEvent);
+        UseItemStartedEvent.RegisterListener(OnUseItemStartedEvent);
+        UseItemEndedEvent.RegisterListener(OnUseItemEndedEvent);
     }
 
     private void OnCharacterSpawnedEvent(CharacterSpawnedEvent characterSpawnedEvent)
@@ -20,23 +25,53 @@ public class PlayerCombatControls : UIComponentWithQueueableActions
         CharacterFinishedAttackEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnCharacterFinishedAttackEvent);
     }
 
+    private void SetActiveForAllControls(bool activeState)
+    {
+        SetActiveForCombatControls(activeState);
+        CancelItemButton.SetActive(activeState);
+    }
+
+    private void SetActiveForCombatControls(bool activeState)
+    {
+        AttackButton.SetActive(activeState);
+        EndTurnButton.SetActive(activeState);
+    }
+
     private void OnCharacterTurnStartedEvent(CharacterTurnStartedEvent _)
     {
-        EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
+        EnqueueAction(() => SetActiveForCombatControls(true));
     }
 
     private void OnCharacterTurnEndedEvent(CharacterTurnEndedEvent _)
     {
-        EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
+        EnqueueAction(() => SetActiveForCombatControls(false));
     }
 
     private void OnCharacterStartedAttackEvent(CharacterStartedAttackEvent _)
     {
-        EnqueueAction(() => PlayerCombatControlsPanel.SetActive(false));
+        EnqueueAction(() => SetActiveForCombatControls(false));
     }
 
     private void OnCharacterFinishedAttackEvent(CharacterFinishedAttackEvent _)
     {
-        EnqueueAction(() => PlayerCombatControlsPanel.SetActive(true));
+        EnqueueAction(() => SetActiveForCombatControls(true));
+    }
+
+    private void OnUseItemStartedEvent(UseItemStartedEvent _)
+    {
+        EnqueueAction(() =>
+        {
+            SetActiveForCombatControls(false);
+            CancelItemButton.SetActive(true);
+        });
+    }
+
+    private void OnUseItemEndedEvent(UseItemEndedEvent _)
+    {
+        EnqueueAction(() =>
+        {
+            SetActiveForCombatControls(true);
+            CancelItemButton.SetActive(false);
+        });
     }
 }

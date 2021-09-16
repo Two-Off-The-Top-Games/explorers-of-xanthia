@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8961818607375269838}
   - component: {fileID: 3494415272961903546}
   - component: {fileID: 783261987568278840}
+  - component: {fileID: 8718391839364630249}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -50,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartingWeapon: {fileID: 4615739129417186831, guid: 633720af50af5354fb948e7a70022baf, type: 3}
-  MaxHealth: 100
+  MaxHealth: 10
   ActionPoints: 20
 --- !u!212 &783261987568278840
 SpriteRenderer:
@@ -103,3 +104,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &8718391839364630249
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6216873017422867032}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 0.5}
+    newSize: {x: 1, y: 0.5}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.5}
+  m_EdgeRadius: 0
