@@ -143,17 +143,5 @@ namespace Entities
         {
             _clickTarget.enabled = false;
         }
-
-        // TODO: Re-add attacking more generically.  Gutting it to use it for something more generic.
-        //private void OnEnableAttackTargetsEvent(EnableAttackTargetsEvent enableAttackTargetsEvent)
-        //{
-        //    _clickTarget.enabled = true;
-        //    _attackedFunc = () =>
-        //    {
-        //        new DisableAttackTargetsEvent().Fire();
-        //        TakeDamage(enableAttackTargetsEvent.Damage);
-        //        new CharacterSelectedAttackTargetEvent(enableAttackTargetsEvent.CharacterInstanceId).Fire();
-        //    };
-        //}
     }
 }

@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartingWeapon: {fileID: 4615739129417186831, guid: 633720af50af5354fb948e7a70022baf, type: 3}
-  MaxHealth: 50
+  MaxHealth: 10
 --- !u!212 &3015568058141651569
 SpriteRenderer:
   m_ObjectHideFlags: 0

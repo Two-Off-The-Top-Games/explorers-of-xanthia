@@ -62,20 +62,6 @@ namespace GameState.Events
         public int CharacterInstanceId;
     }
 
-    public class EnableAttackTargetsEvent : GlobalEvent<EnableAttackTargetsEvent> 
-    {
-        public EnableAttackTargetsEvent(int characterInstanceId, int damage)
-        {
-            CharacterInstanceId = characterInstanceId;
-            Damage = damage;
-        }
-
-        public int CharacterInstanceId;
-        public int Damage;
-    }
-
-    public class DisableAttackTargetsEvent : GlobalEvent<DisableAttackTargetsEvent> { }
-
     public class CombatEvent : GlobalEvent<CombatEvent>
     {
         public CombatEvent(string combatEventText)

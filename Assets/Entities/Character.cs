@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Entities
 {
-    // TODO: Add click box and click target code from Enemy.
     public class Character : MonoBehaviour
     {
         public GameObject StartingWeapon;
@@ -56,7 +55,6 @@ namespace Entities
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
             TurnEndedEvent.RegisterListener(_instanceId, OnTurnEndedEvent);
             CharacterAttackEvent.RegisterListener(_instanceId, OnCharacterAttackEvent);
-            CharacterSelectedAttackTargetEvent.RegisterListener(_instanceId, OnCharacterSelectedAttackTargetEvent);
             EnableClickTargetEvent.RegisterListener(OnEnableClickTargetEvent);
             DisableClickTargetEvent.RegisterListener(OnDisableClickTargetEvent);
         }
@@ -124,8 +122,9 @@ namespace Entities
 
         private void OnCharacterAttackEvent(CharacterAttackEvent characterAttackedEvent)
         {
+            ClickTargetSelectedEvent.RegisterListener(OnClickTargetSelectedEvent);
+            new EnableClickTargetEvent().Fire();
             new CharacterStartedAttackEvent(_instanceId).Fire();
-            new EnableAttackTargetsEvent(_instanceId, _weapon.Damage).Fire();
         }
 
         private void OnEntityTakeDamageEvent(EntityTakeDamageEvent entityTakeDamageEvent)
@@ -162,13 +161,6 @@ namespace Entities
             new CharacterTurnEndedEvent(_instanceId).Fire();
         }
 
-        private void OnCharacterSelectedAttackTargetEvent(CharacterSelectedAttackTargetEvent _)
-        {
-            new CharacterFinishedAttackEvent(_instanceId).Fire();
-            _currentActionPoints -= 1;
-            new CharacterActionPointsChangedEvent(_instanceId, _currentActionPoints, ActionPoints).Fire();
-        }
-
         private void OnEnableClickTargetEvent(EnableClickTargetEvent _)
         {
             _clickTarget.enabled = true;
@@ -177,6 +169,14 @@ namespace Entities
         private void OnDisableClickTargetEvent(DisableClickTargetEvent _)
         {
             _clickTarget.enabled = false;
+        }
+
+        private void OnClickTargetSelectedEvent(ClickTargetSelectedEvent clickTargetSelectedEvent)
+        {
+            new EntityTakeDamageEvent(clickTargetSelectedEvent.SelectedInstanceId, _weapon.Damage).Fire();
+            new DisableClickTargetEvent().Fire();
+            new CharacterFinishedAttackEvent(_instanceId).Fire();
+            ClickTargetSelectedEvent.DeregisterListener(OnClickTargetSelectedEvent);
         }
     }
 }

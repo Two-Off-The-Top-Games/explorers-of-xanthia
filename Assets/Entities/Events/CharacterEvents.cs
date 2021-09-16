@@ -90,11 +90,6 @@ namespace Entities.Events
         public CharacterAttackEvent(int targetInstanceId) : base(targetInstanceId) { }
     }
 
-    public class CharacterSelectedAttackTargetEvent : TargetEvent<CharacterSelectedAttackTargetEvent> 
-    {
-        public CharacterSelectedAttackTargetEvent(int targetInstanceId) : base(targetInstanceId) { }
-    }
-
     public class CharacterStartedAttackEvent : SourceEvent<CharacterStartedAttackEvent>
     {
         public CharacterStartedAttackEvent(int sourceInstanceId) : base(sourceInstanceId) { }
