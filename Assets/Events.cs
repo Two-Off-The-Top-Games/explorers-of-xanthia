@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Events
 {
@@ -135,5 +137,75 @@ namespace Events
                 }
             }
         }
+    }
+
+    public static class DataSource<T>
+    {
+        private static ProvidedMethod _providedMethod = ProvidedMethod.None;
+        private static Func<T> _dataFactory;
+        private static T _data;
+
+        private static string _provideError = $"You can only provide data for {nameof(DataSource<T>)} once.  Data has already been provided for this data source as a {_providedMethod.Name()}.";
+        public static void ProvideSingle(T data)
+        {
+            CheckProvidedMethod();
+
+            _providedMethod = ProvidedMethod.Single;
+            _data = data;
+        }
+
+        public static void ProvideFactory(Func<T> dataFactory)
+        {
+            CheckProvidedMethod();
+
+            _providedMethod = ProvidedMethod.Factory;
+            _dataFactory = dataFactory;
+        }
+
+        private static void CheckProvidedMethod()
+        {
+            if (_providedMethod != ProvidedMethod.None)
+            {
+                Debug.Log(_provideError);
+                throw new InvalidOperationException(_provideError);
+            }
+        }
+
+        public static T Request()
+        {
+           var provideData = _providedMethod switch
+            {
+                ProvidedMethod.Single => () => _data,
+                ProvidedMethod.Factory => _dataFactory,
+                ProvidedMethod.None => () =>
+                    {
+                        string error = $"No data has been provided for {nameof(DataSource<T>)}.";
+                        Debug.Log(error);
+                        throw new InvalidOperationException(error);
+                    }
+                ,
+                _ => throw new ArgumentOutOfRangeException(nameof(_providedMethod), $"Unexpected ProvidedMethod value: {_providedMethod}"),
+            };
+
+            return provideData();
+        }
+    }
+
+    internal enum ProvidedMethod
+    {
+        None,
+        Single,
+        Factory
+    }
+
+    internal static class ProvidedMethodEnums
+    {
+        internal static string Name(this ProvidedMethod providedMethod) => providedMethod switch
+        {
+            ProvidedMethod.None => nameof(ProvidedMethod.None),
+            ProvidedMethod.Single => nameof(ProvidedMethod.Single),
+            ProvidedMethod.Factory => nameof(ProvidedMethod.Factory),
+            _ => throw new ArgumentOutOfRangeException(nameof(providedMethod), $"Unexpected ProvidedMethod value: {providedMethod}"),
+        };
     }
 }
