@@ -1456,6 +1456,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653283103}
   m_CullTransparentMesh: 1
+--- !u!1 &690056916 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8893479619965759006, guid: 1c33c65f81420ed43ba1236cf7473acb, type: 3}
+  m_PrefabInstance: {fileID: 1588685916}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &690056919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690056916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6d8bd29ecaad14c8b8b927286bce03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &702658192
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2080,7 +2097,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameState
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7010993196897048721, guid: 1c33c65f81420ed43ba1236cf7473acb, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1c33c65f81420ed43ba1236cf7473acb, type: 3}
 --- !u!1 &1677057739
 GameObject:
@@ -2703,8 +2721,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1329104930}
   m_HandleRect: {fileID: 1329104929}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.96000004
+  m_Value: 0.99999696
+  m_Size: 0.96
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2834,7 +2852,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 129722620}
   m_HandleRect: {fileID: 129722619}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

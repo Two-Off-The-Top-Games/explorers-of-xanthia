@@ -1,4 +1,5 @@
 using Entities.Events;
+using Events;
 using Events.Entity;
 using GameState.Events;
 using System;
@@ -17,6 +18,8 @@ namespace Entities
         private int _currentHealth;
         protected int _instanceId;
         private BoxCollider2D _clickTarget;
+        private ActiveCharacters _activeCharacters;
+        private ThreadSafeRandom _random;
 
         private void OnMouseDown()
         {
@@ -25,6 +28,8 @@ namespace Entities
 
         private void Awake()
         {
+            RequestDependencies();
+
             _clickTarget = GetComponent<BoxCollider2D>();
             _clickTarget.enabled = false;
             _currentHealth = MaxHealth;
@@ -35,6 +40,12 @@ namespace Entities
             FireInitialEvents();
 
             RegisterEventListeners();
+        }
+
+        private void RequestDependencies()
+        {
+            _activeCharacters = DataSource<ActiveCharacters>.Request();
+            _random = DataSource<ThreadSafeRandom>.Request();
         }
 
         private void FireInitialEvents()
@@ -108,8 +119,9 @@ namespace Entities
 
         private void Attack()
         {
-            // TODO: This is wrong!!!  This will deal damage to the enemy!  Need to change to pick a target from existing characters
-            new EntityTakeDamageEvent(_instanceId, _weapon.Damage).Fire();
+            int instanceIdToAttack = _activeCharacters.ActiveCharacterIds[_random.Next(0, 2)];
+            Debug.Log($"Attacking instance id {instanceIdToAttack}");
+            new EntityTakeDamageEvent(instanceIdToAttack, _weapon.Damage).Fire();
         }
 
         private void OnEnemyTakeDamageEvent(EnemyTakeDamageEvent enemyTakeDamageEvent)

@@ -5,81 +5,77 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
+    private List<int> _enemies = new List<int>();
+    private List<int> _characters = new List<int>();
     private Queue<int> _turnOrder = new Queue<int>();
     private HashSet<int> _deadEntities = new HashSet<int>();
-    private bool _combatIsActive = false;
+    private int _activeTurn;
 
-    private void OnEnable()
+    private void Awake()
     {
-        StartCombatEvent.RegisterListener(OnStartCombatEvent);
+        StartGameEvent.RegisterListener(OnStartGameEvent);
+        CharacterSpawnedEvent.RegisterListener(OnCharacterSpawnedEvent);
+        EnemySpawnedEvent.RegisterListener(OnEnemySpawnedEvent);
         EndTurnEvent.RegisterListener(OnEndTurnEvent);
-        EndCombatEvent.RegisterListener(OnEndCombatEvent);
     }
 
     private void OnDisable()
     {
-        StartCombatEvent.DeregisterListener(OnStartCombatEvent);
+        StartGameEvent.DeregisterListener(OnStartGameEvent);
+        CharacterSpawnedEvent.DeregisterListener(OnCharacterSpawnedEvent);
+        EnemySpawnedEvent.DeregisterListener(OnEnemySpawnedEvent);
         EndTurnEvent.DeregisterListener(OnEndTurnEvent);
-        EndCombatEvent.DeregisterListener(OnEndCombatEvent);
     }
 
-    private void OnStartCombatEvent(StartCombatEvent startCombatEvent)
+    private void OnStartGameEvent(StartGameEvent _)
     {
-        StartCombat(startCombatEvent.OrderedParticipantIds);
+        new SpawnCharactersEvent(3).Fire();
+        new SpawnEnemiesEvent(3).Fire();
+        StartCombat();
     }
 
-    private void StartCombat(int[] orderedParticipantIds)
+    private void OnCharacterSpawnedEvent(CharacterSpawnedEvent characterSpawnedEvent)
     {
-        _turnOrder = new Queue<int>(orderedParticipantIds);
-        for (int i = 0; i < orderedParticipantIds.Length; i++)
-        {
-            EntityDiedEvent.RegisterListener(orderedParticipantIds[i], OnEntityDiedEvent);
-        }
-        _combatIsActive = true;
+        _characters.Add(characterSpawnedEvent.CharacterInstanceId);
+        _turnOrder.Enqueue(characterSpawnedEvent.CharacterInstanceId);
+        EntityDiedEvent.RegisterListener(characterSpawnedEvent.CharacterInstanceId, OnEntityDiedEvent);
+    }
+
+    private void OnEnemySpawnedEvent(EnemySpawnedEvent enemySpawnedEvent)
+    {
+        _enemies.Add(enemySpawnedEvent.EnemyInstanceId);
+        _turnOrder.Enqueue(enemySpawnedEvent.EnemyInstanceId);
+        EntityDiedEvent.RegisterListener(enemySpawnedEvent.EnemyInstanceId, OnEntityDiedEvent);
+    }
+
+    private void StartCombat()
+    {
         StartNextTurn();
     }
 
     private void OnEndTurnEvent(EndTurnEvent _)
     {
-        AdvanceTurn();
+        EndActiveTurn();
     }
 
     private void StartNextTurn()
     {
-        int instanceId;
-        while (true)
+        int participant = _turnOrder.Dequeue();
+        if (_deadEntities.Contains(participant))
         {
-            instanceId = _turnOrder.Peek();
-            // If the entity isn't dead, we can just start their turn like normal.
-            if (!_deadEntities.Contains(instanceId))
-            {
-                break;
-            }
-            // If they are dead, we need to remove them and dequeue them.
-            _deadEntities.Remove(instanceId);
-            _turnOrder.Dequeue();
+            _deadEntities.Remove(participant);
+            StartNextTurn();
+            return;
         }
-        new StartCombatTurnEvent(instanceId).Fire();
+        _activeTurn = participant;
+        new StartCombatTurnEvent(_activeTurn).Fire();
     }
 
-    private void AdvanceTurn()
+    private void EndActiveTurn()
     {
-        int instanceId = _turnOrder.Dequeue();
-        new TurnEndedEvent(instanceId).Fire();
-        _turnOrder.Enqueue(instanceId);
+        new TurnEndedEvent(_activeTurn).Fire();
+        _turnOrder.Enqueue(_activeTurn);
         StartNextTurn();
-    }
-
-    private void OnEndCombatEvent(EndCombatEvent _)
-    {
-        EndCombat();
-    }
-
-    private void EndCombat()
-    {
-        _combatIsActive = false;
-        // Realistically don't need to do this, but could save some memory.
-        _turnOrder = null;
     }
 
     private void OnEntityDiedEvent(EntityDiedEvent entityDiedEvent)
