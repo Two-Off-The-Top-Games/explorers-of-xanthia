@@ -10,6 +10,7 @@ namespace Entities
 {
     public class Enemy : MonoBehaviour
     {
+        public ToggleableSprite CurrentTurnIndicator;
         public GameObject StartingWeapon;
         public int MaxHealth;
 
@@ -59,6 +60,7 @@ namespace Entities
             EnemyGainHealthEvent.RegisterListener(_instanceId, OnEnemyGainHealthEvent);
             EnemyGainMaxHealthEvent.RegisterListener(_instanceId, OnEnemyGainMaxHealthEvent);
             StartCombatTurnEvent.RegisterListener(_instanceId, OnStartCombatTurnEvent);
+            TurnEndedEvent.RegisterListener(_instanceId, OnTurnEndedEvent);
             DisableClickTargetEvent.RegisterListener(OnDisableClickTargetEvent);
             EnableClickTargetEvent.RegisterListener(OnEnableClickTargetEvent);
         }
@@ -69,6 +71,7 @@ namespace Entities
             EnemyGainHealthEvent.DeregisterListener(_instanceId);
             EnemyGainMaxHealthEvent.DeregisterListener(_instanceId);
             StartCombatTurnEvent.DeregisterListener(_instanceId);
+            TurnEndedEvent.DeregisterListener(_instanceId, OnTurnEndedEvent);
             DisableClickTargetEvent.DeregisterListener(OnDisableClickTargetEvent);
             EnableClickTargetEvent.DeregisterListener(OnEnableClickTargetEvent);
         }
@@ -142,8 +145,15 @@ namespace Entities
         private void OnStartCombatTurnEvent(StartCombatTurnEvent _)
         {
             Debug.Log("Enemy Turn Started!");
+            CurrentTurnIndicator.Enable();
 
             Task.Run(PerformTurn);
+        }
+
+        private void OnTurnEndedEvent(TurnEndedEvent _)
+        {
+            Debug.Log("Enemy Turn Ended!");
+            CurrentTurnIndicator.Disable();
         }
 
         private void OnEnableClickTargetEvent(EnableClickTargetEvent _)
