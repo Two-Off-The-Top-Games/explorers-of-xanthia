@@ -8,12 +8,12 @@ namespace Entities
 {
     public class Character : MonoBehaviour
     {
-        public ToggleableSprite CurrentTurnIndicator;
-        public GameObject TargetArrow;
+        public ToggleableSprite Indicator;
         public GameObject StartingWeapon;
         public int MaxHealth;
         public int ActionPoints;
 
+        private bool _isMyTurn;
         private GameObject _CurrentWeapon;
         private Weapon _weapon;
         private int _currentHealth;
@@ -155,24 +155,28 @@ namespace Entities
             _currentActionPoints = ActionPoints;
             new CharacterActionPointsChangedEvent(_instanceId, _currentActionPoints, ActionPoints).Fire();
             new CharacterTurnStartedEvent(_instanceId).Fire();
-            CurrentTurnIndicator.Enable();
+            _isMyTurn = true;
+            Indicator.Enable();
         }
 
         private void OnTurnEndedEvent(TurnEndedEvent _)
         {
             Debug.Log("Character turn ended!");
             new CharacterTurnEndedEvent(_instanceId).Fire();
-            CurrentTurnIndicator.Disable();
+            _isMyTurn = false;
+            Indicator.Disable();
         }
 
         private void OnEnableClickTargetEvent(EnableClickTargetEvent _)
         {
             _clickTarget.enabled = true;
+            Indicator.Enable();
         }
 
         private void OnDisableClickTargetEvent(DisableClickTargetEvent _)
         {
             _clickTarget.enabled = false;
+            Indicator.Toggle(_isMyTurn);
         }
 
         private void OnClickTargetSelectedEvent(ClickTargetSelectedEvent clickTargetSelectedEvent)

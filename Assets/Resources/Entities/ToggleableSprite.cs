@@ -18,4 +18,9 @@ public class ToggleableSprite : UIComponentWithQueueableActions
     {
         EnqueueAction(() => _spriteRenderer.enabled = false);
     }
+
+    public void Toggle(bool enabled)
+    {
+        EnqueueAction(() => _spriteRenderer.enabled = enabled);
+    }
 }

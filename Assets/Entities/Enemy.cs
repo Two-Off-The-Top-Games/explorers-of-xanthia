@@ -10,10 +10,11 @@ namespace Entities
 {
     public class Enemy : MonoBehaviour
     {
-        public ToggleableSprite CurrentTurnIndicator;
+        public ToggleableSprite Indicator;
         public GameObject StartingWeapon;
         public int MaxHealth;
 
+        private bool _isMyTurn;
         private GameObject _CurrentWeapon;
         private Weapon _weapon;
         private int _currentHealth;
@@ -145,7 +146,8 @@ namespace Entities
         private void OnStartCombatTurnEvent(StartCombatTurnEvent _)
         {
             Debug.Log("Enemy Turn Started!");
-            CurrentTurnIndicator.Enable();
+            _isMyTurn = true;
+            Indicator.Enable();
 
             Task.Run(PerformTurn);
         }
@@ -153,17 +155,20 @@ namespace Entities
         private void OnTurnEndedEvent(TurnEndedEvent _)
         {
             Debug.Log("Enemy Turn Ended!");
-            CurrentTurnIndicator.Disable();
+            _isMyTurn = false;
+            Indicator.Disable();
         }
 
         private void OnEnableClickTargetEvent(EnableClickTargetEvent _)
         {
             _clickTarget.enabled = true;
+            Indicator.Enable();
         }
 
         private void OnDisableClickTargetEvent(DisableClickTargetEvent _)
         {
             _clickTarget.enabled = false;
+            Indicator.Toggle(_isMyTurn);
         }
     }
 }
